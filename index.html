@@ -182,7 +182,7 @@
             </div>
             <div class="input-group">
                 <label>জন্ম তারিখ:</label>
-                <input type="text" id="searchDob" placeholder="যেমন: ০১/০১/১৯৬০">
+                <input type="text" id="searchDob" placeholder="যেমন: ২০/০৪/২০০৪">
             </div>
             <div class="input-group">
                 <label>আইডি:</label>
@@ -217,6 +217,11 @@
         window.onload = function() {
             document.getElementById('totalCount').innerText = "০";
         };
+
+        // বাংলা শূন্যকে ইংরেজি শূন্য বানানোর কনভার্টার ফাংশন
+        function fixZero(str) {
+            return str.replace(/০/g, '0');
+        }
 
         function displayVoters(data) {
             const listContainer = document.getElementById('voterList');
@@ -257,4 +262,67 @@
                                 <b>ঠিকানা:</b> ${voter.address || ''}
                             </div>
                             
-                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px; color:#888
+                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px; color:#888;">
+                                <span>এরিয়া কোড: 130777</span>
+                                <span style="background:#c2185b; color:white; padding:2px 8px; border-radius:10px; font-weight:bold;">পুরুষ</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listContainer.innerHTML += card;
+            });
+
+            if(data.length > 50) {
+                listContainer.innerHTML += `<div style="text-align:center; padding:10px; color:#666; font-size:13px;">আরও ${(data.length - 50)} টি রেজাল্ট ফিল্টার করা হয়েছে। নির্দিষ্ট করতে আরও লিখুন...</div>`;
+            }
+        }
+
+        function triggerSearch() {
+            const nameQuery = document.getElementById('searchName').value.toLowerCase().trim();
+            const fatherQuery = document.getElementById('searchFather').value.toLowerCase().trim();
+            const motherQuery = document.getElementById('searchMother').value.toLowerCase().trim();
+            const villageQuery = document.getElementById('searchVillage').value.toLowerCase().trim();
+            
+            // ইনপুট থেকে নেওয়া জন্ম তারিখের বাংলা শূন্যকে ব্যাকগ্রাউন্ডে অটোমেটিক কনভার্ট করা হচ্ছে
+            const dobQuery = fixZero(document.getElementById('searchDob').value.trim());
+            const idQuery = fixZero(document.getElementById('searchId').value.trim());
+
+            if(!nameQuery && !fatherQuery && !motherQuery && !villageQuery && !dobQuery && !idQuery) {
+                alert("অনুগ্রহ করে যেকোনো একটি বক্সে কিছু লিখুন!");
+                return;
+            }
+
+            const targetData = typeof voterListMale !== 'undefined' ? voterListMale : [];
+
+            const filtered = targetData.filter(voter => {
+                const matchName = !nameQuery || (voter.name && voter.name.toLowerCase().includes(nameQuery));
+                const matchFather = !fatherQuery || (voter.fatherName && voter.fatherName.toLowerCase().includes(fatherQuery));
+                const matchMother = !motherQuery || (voter.motherName && voter.motherName.toLowerCase().includes(motherQuery));
+                const matchVillage = !villageQuery || (voter.address && voter.address.toLowerCase().includes(villageQuery));
+                
+                // ডাটাবেজের dob এবং ইনপুটের dob দুইটারই শূন্য কনভার্ট করে ম্যাচ করানো হচ্ছে
+                const voterDobFixed = voter.dob ? fixZero(voter.dob) : '';
+                const matchDob = !dobQuery || voterDobFixed.includes(dobQuery);
+                
+                const voterIdFixed = voter.voterId ? fixZero(voter.voterId) : '';
+                const matchId = !idQuery || voterIdFixed.includes(idQuery) || (voter.serial && fixZero(voter.serial).includes(idQuery));
+
+                return matchName && matchFather && matchMother && matchVillage && matchDob && matchId;
+            });
+
+            displayVoters(filtered);
+        }
+
+        function clearFilters() {
+            document.getElementById('searchName').value = '';
+            document.getElementById('searchFather').value = '';
+            document.getElementById('searchMother').value = '';
+            document.getElementById('searchVillage').value = '';
+            document.getElementById('searchDob').value = '';
+            document.getElementById('searchId').value = '';
+            document.getElementById('voterList').innerHTML = '<div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।</div>';
+            document.getElementById('totalCount').innerText = "০";
+        }
+    </script>
+</body>
+</html>
