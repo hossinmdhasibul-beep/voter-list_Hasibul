@@ -8,27 +8,36 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
-        body {
-            font-family: 'Hind Siliguri', sans-serif;
-            background-color: #f5f6f8;
+        body { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            background-color: #f5f6f8; 
+        }
+        /* ইনপুট বক্সে ক্লিক যেন নিশ্চিত হয় তার জন্য অতিরিক্ত স্টাইল */
+        #searchInput {
+            position: relative;
+            z-index: 50;
+            pointer-events: auto;
         }
     </style>
 </head>
 <body class="p-4 max-w-md mx-auto">
 
-    <!-- টপ সার্চ বার এবং ফিল্টার (স্ক্রিনশটের মতো হুবহু ডিজাইন) -->
-    <div class="flex items-center gap-2 mb-6 bg-[#eae8e8] p-1.5 rounded-full shadow-inner">
-        <button class="p-2 text-gray-700">
+    <!-- টপ সার্চ বার এবং ফিল্টার (ক্লিক ও টাইপ ফিক্সড করা লেআউট) -->
+    <div class="relative flex items-center gap-2 mb-6 bg-[#eae8e8] p-1.5 rounded-full shadow-inner z-40">
+        <div class="p-2 text-gray-700 cursor-pointer">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
-        </button>
-        <input type="text" id="searchInput" oninput="searchVoter()" placeholder="নাম | আইডি নং | ক্রমিক নং | গ্রাম" class="w-full bg-transparent py-2 px-2 text-base text-gray-800 outline-none placeholder-gray-500">
-        <button class="p-2 bg-white rounded-full text-gray-700 shadow-sm">
+        </div>
+        
+        <!-- আসল ইনপুট বক্স (এটিতে এখন ক্লিক ও টাইপ ১০০% কাজ করবে) -->
+        <input type="text" id="searchInput" onkeyup="searchVoter()" placeholder="নাম | আইডি নং | ক্রমিক নং | গ্রাম" class="w-full bg-transparent py-2 px-2 text-base text-gray-800 outline-none placeholder-gray-500 block relative focus:ring-0">
+        
+        <div class="p-2 bg-white rounded-full text-gray-700 shadow-sm cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
             </svg>
-        </button>
+        </div>
     </div>
 
     <!-- মোট কতজন দেখাচ্ছে তার কাউন্টার -->
@@ -39,7 +48,7 @@
     <!-- ভোটার কার্ড লিস্ট কন্টেইনার -->
     <div id="voterList" class="space-y-5"></div>
 
-    <!-- আপনার ডাটা ফাইলটি এখানে লিংক করা হলো -->
+    <!-- আপনার ডাটা ফাইল লিংক -->
     <script src="male_voters.js"></script>
 
     <script>
@@ -51,7 +60,7 @@
             listContainer.innerHTML = '';
             totalCount.innerText = data.length.toLocaleString('bn-BD'); 
 
-            if (data.length === 0) {
+            if (!data || data.length === 0) {
                 listContainer.innerHTML = `
                     <div class="text-center text-gray-400 py-12">
                         <p class="text-lg">কোনো তথ্য পাওয়া যায়নি!</p>
@@ -111,10 +120,12 @@
             displayVoters(filtered);
         }
 
-        // প্রথমবার পেজ ওপেন হলে লোড হবে
+        // পেজ লোড হলে ডাটা দেখানোর নিয়ম
         window.onload = function() {
-            const targetData = typeof voterListMale !== 'undefined' ? voterListMale : [];
-            displayVoters(targetData);
+            setTimeout(() => {
+                const targetData = typeof voterListMale !== 'undefined' ? voterListMale : [];
+                displayVoters(targetData);
+            }, 500);
         };
     </script>
 </body>
