@@ -54,8 +54,8 @@
             margin-bottom: 12px;
         }
         .input-group label {
-            width: 60px;
-            font-size: 15px;
+            width: 75px; /* লেবেল একটু বড় করা হলো জন্ম তারিখ লেখার জন্য */
+            font-size: 14px;
             font-weight: bold;
         }
         .input-group input {
@@ -181,6 +181,10 @@
                 <input type="text" id="searchVillage" placeholder="লিখুন...">
             </div>
             <div class="input-group">
+                <label>জন্ম তারিখ:</label>
+                <input type="text" id="searchDob" placeholder="যেমন: ০১/০১/১৯৬০">
+            </div>
+            <div class="input-group">
                 <label>আইডি:</label>
                 <input type="text" id="searchId" placeholder="আইডি নং লিখুন...">
             </div>
@@ -210,7 +214,6 @@
     <script src="male_voters.js"></script>
 
     <script>
-        // পেজ লোড হওয়ার সময় আমরা কোনো ডাটা দেখাবো না, যাতে পেজ হ্যাং না হয়
         window.onload = function() {
             document.getElementById('totalCount').innerText = "০";
         };
@@ -227,7 +230,7 @@
                 return;
             }
 
-            // অ্যাপ পারফরম্যান্স ভালো রাখার জন্য সর্বোচ্চ প্রথম ৫০টি রেজাল্ট একসাথে দেখাবে
+            // সর্বোচ্চ ৫০টি রেজাল্ট একসাথে দেখাবে পারফরম্যান্সের জন্য
             const limitedData = data.slice(0, 50);
 
             limitedData.forEach((voter, index) => {
@@ -243,7 +246,6 @@
                             <div class="info-line"><span class="info-label">পিতা:</span><span class="info-value">${voter.fatherName || ''}</span></div>
                             <div class="info-line"><span class="info-label">মাতা:</span><span class="info-value">${voter.motherName || ''}</span></div>
                             <div class="info-line"><span class="info-label">পেশা:</span><span class="info-value">${voter.profession || ''}</span></div>
-                            <div class="voter-id" style="display:none;">${voter.serial || ''}</div>
                             <div class="info-line"><span class="info-label">জন্ম তারিখ:</span><span class="info-value">${voter.dob || ''}</span></div>
                             
                             <div class="sub-grid">
@@ -276,10 +278,10 @@
             const fatherQuery = document.getElementById('searchFather').value.toLowerCase().trim();
             const motherQuery = document.getElementById('searchMother').value.toLowerCase().trim();
             const villageQuery = document.getElementById('searchVillage').value.toLowerCase().trim();
+            const dobQuery = document.getElementById('searchDob').value.trim(); // নতুন জন্ম তারিখ ভেরিয়েবল
             const idQuery = document.getElementById('searchId').value.trim();
 
-            // যদি সব বক্স খালি থাকে তবে সার্চ করবে না
-            if(!nameQuery && !fatherQuery && !motherQuery && !villageQuery && !idQuery) {
+            if(!nameQuery && !fatherQuery && !motherQuery && !villageQuery && !dobQuery && !idQuery) {
                 alert("অনুগ্রহ করে যেকোনো একটি বক্সে কিছু লিখুন!");
                 return;
             }
@@ -291,9 +293,10 @@
                 const matchFather = !fatherQuery || (voter.fatherName && voter.fatherName.toLowerCase().includes(fatherQuery));
                 const matchMother = !motherQuery || (voter.motherName && voter.motherName.toLowerCase().includes(motherQuery));
                 const matchVillage = !villageQuery || (voter.address && voter.address.toLowerCase().includes(villageQuery));
+                const matchDob = !dobQuery || (voter.dob && voter.dob.includes(dobQuery)); // জন্ম তারিখ ম্যাচিং লজিক
                 const matchId = !idQuery || (voter.voterId && voter.voterId.includes(idQuery)) || (voter.serial && voter.serial.includes(idQuery));
 
-                return matchName && matchFather && matchMother && matchVillage && matchId;
+                return matchName && matchFather && matchMother && matchVillage && matchDob && matchId;
             });
 
             displayVoters(filtered);
@@ -304,6 +307,7 @@
             document.getElementById('searchFather').value = '';
             document.getElementById('searchMother').value = '';
             document.getElementById('searchVillage').value = '';
+            document.getElementById('searchDob').value = '';
             document.getElementById('searchId').value = '';
             document.getElementById('voterList').innerHTML = '<div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।</div>';
             document.getElementById('totalCount').innerText = "০";
