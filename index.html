@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy Data Search System</title>
     <style>
-        /* কোন অদৃশ্য লেয়ার যেন তৈরি না হতে পারে তার জন্য সম্পূর্ণ ক্লিন স্টাইল */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -67,9 +66,6 @@
             font-size: 16px;
             outline: none;
             background: #fff;
-            /* মোবাইল ব্রাউজারে ইনপুট সিলেকশন নিশ্চিত করার জন্য */
-            -webkit-user-select: text;
-            user-select: text;
         }
         .button-grid {
             display: flex;
@@ -107,7 +103,6 @@
             border-radius: 8px;
             border: 1px solid #ddd;
             margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .card-header {
             background-color: #1e6cd9;
@@ -170,23 +165,23 @@
             </div>
 
             <div class="input-group">
-                <label for="searchName">নাম:</label>
+                <label>নাম:</label>
                 <input type="text" id="searchName" placeholder="লিখুন...">
             </div>
             <div class="input-group">
-                <label for="searchFather">পিতা:</label>
+                <label>পিতা:</label>
                 <input type="text" id="searchFather" placeholder="লিখুন...">
             </div>
             <div class="input-group">
-                <label for="searchMother">মাতা:</label>
+                <label>মাতা:</label>
                 <input type="text" id="searchMother" placeholder="লিখুন...">
             </div>
             <div class="input-group">
-                <label for="searchVillage">গ্রাম:</label>
+                <label>গ্রাম:</label>
                 <input type="text" id="searchVillage" placeholder="লিখুন...">
             </div>
             <div class="input-group">
-                <label for="searchId">আইডি:</label>
+                <label>আইডি:</label>
                 <input type="text" id="searchId" placeholder="আইডি নং লিখুন...">
             </div>
 
@@ -201,7 +196,11 @@
             <span>ফলাফল: <span id="totalCount">০</span> জন</span>
         </div>
 
-        <div id="voterList"></div>
+        <div id="voterList">
+            <div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">
+                উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
+            </div>
+        </div>
     </div>
 
     <div class="footer-branding">
@@ -211,6 +210,11 @@
     <script src="male_voters.js"></script>
 
     <script>
+        // পেজ লোড হওয়ার সময় আমরা কোনো ডাটা দেখাবো না, যাতে পেজ হ্যাং না হয়
+        window.onload = function() {
+            document.getElementById('totalCount').innerText = "০";
+        };
+
         function displayVoters(data) {
             const listContainer = document.getElementById('voterList');
             const totalCount = document.getElementById('totalCount');
@@ -223,7 +227,10 @@
                 return;
             }
 
-            data.forEach((voter, index) => {
+            // অ্যাপ পারফরম্যান্স ভালো রাখার জন্য সর্বোচ্চ প্রথম ৫০টি রেজাল্ট একসাথে দেখাবে
+            const limitedData = data.slice(0, 50);
+
+            limitedData.forEach((voter, index) => {
                 const displayIndex = String(index + 1).padStart(2, '০'); 
                 
                 const card = `
@@ -236,6 +243,7 @@
                             <div class="info-line"><span class="info-label">পিতা:</span><span class="info-value">${voter.fatherName || ''}</span></div>
                             <div class="info-line"><span class="info-label">মাতা:</span><span class="info-value">${voter.motherName || ''}</span></div>
                             <div class="info-line"><span class="info-label">পেশা:</span><span class="info-value">${voter.profession || ''}</span></div>
+                            <div class="voter-id" style="display:none;">${voter.serial || ''}</div>
                             <div class="info-line"><span class="info-label">জন্ম তারিখ:</span><span class="info-value">${voter.dob || ''}</span></div>
                             
                             <div class="sub-grid">
@@ -257,6 +265,10 @@
                 `;
                 listContainer.innerHTML += card;
             });
+
+            if(data.length > 50) {
+                listContainer.innerHTML += `<div style="text-align:center; padding:10px; color:#666; font-size:13px;">আরও ${(data.length - 50)} টি রেজাল্ট ফিল্টার করা হয়েছে। নির্দিষ্ট করতে আরও লিখুন...</div>`;
+            }
         }
 
         function triggerSearch() {
@@ -265,6 +277,12 @@
             const motherQuery = document.getElementById('searchMother').value.toLowerCase().trim();
             const villageQuery = document.getElementById('searchVillage').value.toLowerCase().trim();
             const idQuery = document.getElementById('searchId').value.trim();
+
+            // যদি সব বক্স খালি থাকে তবে সার্চ করবে না
+            if(!nameQuery && !fatherQuery && !motherQuery && !villageQuery && !idQuery) {
+                alert("অনুগ্রহ করে যেকোনো একটি বক্সে কিছু লিখুন!");
+                return;
+            }
 
             const targetData = typeof voterListMale !== 'undefined' ? voterListMale : [];
 
@@ -287,17 +305,9 @@
             document.getElementById('searchMother').value = '';
             document.getElementById('searchVillage').value = '';
             document.getElementById('searchId').value = '';
-            
-            const targetData = typeof voterListMale !== 'undefined' ? voterListMale : [];
-            displayVoters(targetData);
+            document.getElementById('voterList').innerHTML = '<div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।</div>';
+            document.getElementById('totalCount').innerText = "০";
         }
-
-        window.onload = function() {
-            setTimeout(() => {
-                const targetData = typeof voterListMale !== 'undefined' ? voterListMale : [];
-                displayVoters(targetData);
-            }, 400);
-        };
     </script>
 </body>
 </html>
