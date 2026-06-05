@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easy Data Search System</title>
+    <title>Hasibul Make voter search</title>
     <style>
         * {
             box-sizing: border-box;
@@ -172,10 +172,11 @@
 </head>
 <body>
 
-    <div class="header-bar">Easy Data Search System</div>
+    <!-- হেডার বারের নাম পরিবর্তন করা হলো -->
+    <div class="header-bar">Hasibul Make voter search</div>
 
     <div class="container">
-        <!-- সার্চ কার্ড প্যানেল -->
+        <!-- সার্চカード প্যানেল -->
         <div class="search-card">
             <div class="dropdown-grid">
                 <select><option>Pabna</option></select>
@@ -244,7 +245,6 @@
             return str.replace(/০/g, '0');
         }
 
-        // ইংরেজি সংখ্যাকে বাংলা সংখ্যায় কনভার্ট করার ফাংশন (যেন নামের পাশের সিরিয়াল বাংলায় দেখায়)
         function enToBnNumber(str) {
             const en = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
             const bn = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
@@ -263,21 +263,16 @@
                 return;
             }
 
-            // প্রথম ৫০টি রেজাল্ট দেখাবে পারফরম্যান্স বুস্টের জন্য
             const limitedData = data.slice(0, 50);
 
             limitedData.forEach((voter) => {
-                // গিটহাবের লুপ ইনডেক্স এর বদলে সরাসরি আপনার JSON ফাইলের আসল সিরিয়াল নেওয়া হচ্ছে
-                // একই সাথে সিরিয়ালটি যদি ৪ ডিজিটের হয় (যেমন: 0001) তবে ওটার বামের অতিরিক্ত শূন্য রিমুভ করে ক্লিন করে নেওয়া হচ্ছে
                 let originalSerial = voter.serial ? String(voter.serial).replace(/^0+/, '') : '';
                 if (!originalSerial) originalSerial = '১';
                 
-                // সিরিয়াল নম্বরটি বাংলা হরফে রূপান্তর
                 const displayIndex = enToBnNumber(originalSerial).padStart(2, '০'); 
                 
                 const card = `
                     <div class="voter-card">
-                        <!-- কার্ড হেডার: এখন নামের পাশে আপনার ফাইলের আসল সিরিয়াল দেখাবে -->
                         <div class="card-header">
                             <h2>${displayIndex}. নাম: ${voter.name || ''}</h2>
                             <span class="voter-id">ID: ${voter.voterId || ''}</span>
@@ -298,7 +293,6 @@
                                 <b>ঠিকানা:</b> ${voter.address || ''}
                             </div>
                             
-                            <!-- এরিয়া কোড পুরোপুরি রিমুভ করে শুধু ডানপাশে লিঙ্গ ট্যাগ রাখা হলো -->
                             <div style="display:flex; justify-content:flex-end; margin-top:10px; font-size:12px;">
                                 <span class="gender-tag">পুরুষ</span>
                             </div>
