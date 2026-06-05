@@ -4,55 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ভোটার তথ্য অনুসন্ধান</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
-        body { 
-            font-family: 'Hind Siliguri', sans-serif; 
-            background-color: #f5f6f8; 
-        }
-        /* ইনপুট বক্সে ক্লিক যেন নিশ্চিত হয় তার জন্য অতিরিক্ত স্টাইল */
-        #searchInput {
-            position: relative;
-            z-index: 50;
-            pointer-events: auto;
-        }
+        body { font-family: 'Hind Siliguri', sans-serif; background-color: #f5f6f8; margin: 0; padding: 16px; }
     </style>
 </head>
-<body class="p-4 max-w-md mx-auto">
+<body class="max-w-md mx-auto">
 
-    <!-- টপ সার্চ বার এবং ফিল্টার (ক্লিক ও টাইপ ফিক্সড করা লেআউট) -->
-    <div class="relative flex items-center gap-2 mb-6 bg-[#eae8e8] p-1.5 rounded-full shadow-inner z-40">
-        <div class="p-2 text-gray-700 cursor-pointer">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
+    <!-- ১০০% ফিক্সড সার্চ বার লেআউট -->
+    <div class="w-full mb-6 bg-[#eae8e8] rounded-full p-2 flex items-center shadow-inner">
+        <div class="px-2 text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </div>
         
-        <!-- আসল ইনপুট বক্স (এটিতে এখন ক্লিক ও টাইপ ১০০% কাজ করবে) -->
-        <input type="text" id="searchInput" onkeyup="searchVoter()" placeholder="নাম | আইডি নং | ক্রমিক নং | গ্রাম" class="w-full bg-transparent py-2 px-2 text-base text-gray-800 outline-none placeholder-gray-500 block relative focus:ring-0">
+        <input type="text" id="searchInput" oninput="searchVoter()" placeholder="এখানে টাইপ করুন..." class="w-full bg-transparent py-2 px-1 text-lg text-black outline-none border-none placeholder-gray-500" style="-webkit-user-select: text; user-select: text;">
         
-        <div class="p-2 bg-white rounded-full text-gray-700 shadow-sm cursor-pointer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-            </svg>
+        <div class="p-2 bg-white rounded-full text-gray-700 shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
         </div>
     </div>
 
-    <!-- মোট কতজন দেখাচ্ছে তার কাউন্টার -->
     <div class="text-right text-xs text-gray-500 mb-3 px-2">
         মোট রেকর্ড: <span id="totalCount" class="font-bold">০</span> টি
     </div>
 
-    <!-- ভোটার কার্ড লিস্ট কন্টেইনার -->
     <div id="voterList" class="space-y-5"></div>
 
-    <!-- আপনার ডাটা ফাইল লিংক -->
     <script src="male_voters.js"></script>
 
     <script>
-        // ভোটারদের তথ্য স্ক্রিনে দেখানোর ফাংশন
         function displayVoters(data) {
             const listContainer = document.getElementById('voterList');
             const totalCount = document.getElementById('totalCount');
@@ -61,11 +42,7 @@
             totalCount.innerText = data.length.toLocaleString('bn-BD'); 
 
             if (!data || data.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="text-center text-gray-400 py-12">
-                        <p class="text-lg">কোনো তথ্য পাওয়া যায়নি!</p>
-                    </div>
-                `;
+                listContainer.innerHTML = `<div class="text-center text-gray-400 py-12"><p class="text-lg">কোনো তথ্য পাওয়া যায়নি!</p></div>`;
                 return;
             }
 
@@ -78,22 +55,10 @@
                         </div>
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">${voter.name || ''}</h2>
                         <div class="space-y-2.5 text-[15px] text-gray-600">
-                            <div class="flex justify-between border-b border-gray-50 pb-1.5">
-                                <span class="text-gray-400">পিতার নাম</span>
-                                <span class="font-medium text-gray-800 text-right">${voter.fatherName || ''}</span>
-                            </div>
-                            <div class="flex justify-between border-b border-gray-50 pb-1.5">
-                                <span class="text-gray-400">মাতার নাম</span>
-                                <span class="font-medium text-gray-800 text-right">${voter.motherName || ''}</span>
-                            </div>
-                            <div class="flex justify-between border-b border-gray-50 pb-1.5">
-                                <span class="text-gray-400">পেশা</span>
-                                <span class="font-medium text-gray-800 text-right">${voter.profession || ''}</span>
-                            </div>
-                            <div class="flex justify-between pb-1">
-                                <span class="text-gray-400">জন্ম তারিখ</span>
-                                <span class="font-medium text-gray-800 text-right">${voter.dob || ''}</span>
-                            </div>
+                            <div class="flex justify-between border-b border-gray-50 pb-1.5"><span class="text-gray-400">পিতার নাম</span><span class="font-medium text-gray-800 text-right">${voter.fatherName || ''}</span></div>
+                            <div class="flex justify-between border-b border-gray-50 pb-1.5"><span class="text-gray-400">মাতার নাম</span><span class="font-medium text-gray-800 text-right">${voter.motherName || ''}</span></div>
+                            <div class="flex justify-between border-b border-gray-50 pb-1.5"><span class="text-gray-400">পেশা</span><span class="font-medium text-gray-800 text-right">${voter.profession || ''}</span></div>
+                            <div class="flex justify-between pb-1"><span class="text-gray-400">জন্ম তারিখ</span><span class="font-medium text-gray-800 text-right">${voter.dob || ''}</span></div>
                         </div>
                         <div class="mt-4 pt-3 border-t border-gray-100">
                             <p class="text-xs text-gray-400 font-semibold mb-1">ঠিকানা</p>
@@ -105,7 +70,6 @@
             });
         }
 
-        // রিয়েল-টাইম সার্চ ফাংশন
         function searchVoter() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const targetData = typeof voterListMale !== 'undefined' ? voterListMale : [];
@@ -120,7 +84,6 @@
             displayVoters(filtered);
         }
 
-        // পেজ লোড হলে ডাটা দেখানোর নিয়ম
         window.onload = function() {
             setTimeout(() => {
                 const targetData = typeof voterListMale !== 'undefined' ? voterListMale : [];
