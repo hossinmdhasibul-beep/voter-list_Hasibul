@@ -114,6 +114,16 @@
             font-size: 15px;
             font-weight: bold;
         }
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .card-header .voter-id {
+            font-size: 12px;
+            background-color: #1651a3;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
         .card-body {
             padding: 12px;
             border-left: 3px solid #f25e5e;
@@ -151,6 +161,13 @@
             font-weight: bold;
             margin-top: 30px;
         }
+        .gender-tag {
+            background-color: #c2185b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -158,6 +175,7 @@
     <div class="header-bar">Easy Data Search System</div>
 
     <div class="container">
+        <!-- সার্চ কার্ড প্যানেল -->
         <div class="search-card">
             <div class="dropdown-grid">
                 <select><option>Pabna</option></select>
@@ -195,11 +213,13 @@
             </div>
         </div>
 
+        <!-- কাউন্টার বার -->
         <div class="info-bar">
             <span>Search your data, just a second</span>
             <span>ফলাফল: <span id="totalCount">০</span> জন</span>
         </div>
 
+        <!-- ভোটার ডাটা লিস্ট -->
         <div id="voterList">
             <div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">
                 উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
@@ -207,10 +227,12 @@
         </div>
     </div>
 
+    <!-- নিচে আপনার নাম ব্র্যান্ডিং -->
     <div class="footer-branding">
         Develop Hasibul
     </div>
 
+    <!-- আপনার ডাটা ফাইল লিংক -->
     <script src="male_voters.js"></script>
 
     <script>
@@ -218,9 +240,15 @@
             document.getElementById('totalCount').innerText = "০";
         };
 
-        // বাংলা শূন্যকে ইংরেজি শূন্য বানানোর কনভার্টার ফাংশন
         function fixZero(str) {
             return str.replace(/০/g, '0');
+        }
+
+        // ইংরেজি সংখ্যাকে বাংলা সংখ্যায় কনভার্ট করার ফাংশন (যেন নামের পাশের সিরিয়াল বাংলায় দেখায়)
+        function enToBnNumber(str) {
+            const en = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+            const bn = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+            return String(str).replace(/[0-9]/g, w => bn[en.indexOf(w)]);
         }
 
         function displayVoters(data) {
@@ -235,16 +263,24 @@
                 return;
             }
 
+            // প্রথম ৫০টি রেজাল্ট দেখাবে পারফরম্যান্স বুস্টের জন্য
             const limitedData = data.slice(0, 50);
 
-            limitedData.forEach((voter, index) => {
-                const displayIndex = String(index + 1).padStart(2, '০'); 
+            limitedData.forEach((voter) => {
+                // গিটহাবের লুপ ইনডেক্স এর বদলে সরাসরি আপনার JSON ফাইলের আসল সিরিয়াল নেওয়া হচ্ছে
+                // একই সাথে সিরিয়ালটি যদি ৪ ডিজিটের হয় (যেমন: 0001) তবে ওটার বামের অতিরিক্ত শূন্য রিমুভ করে ক্লিন করে নেওয়া হচ্ছে
+                let originalSerial = voter.serial ? String(voter.serial).replace(/^0+/, '') : '';
+                if (!originalSerial) originalSerial = '১';
+                
+                // সিরিয়াল নম্বরটি বাংলা হরফে রূপান্তর
+                const displayIndex = enToBnNumber(originalSerial).padStart(2, '০'); 
                 
                 const card = `
                     <div class="voter-card">
+                        <!-- কার্ড হেডার: এখন নামের পাশে আপনার ফাইলের আসল সিরিয়াল দেখাবে -->
                         <div class="card-header">
-                            <div>${displayIndex}. নাম: ${voter.name || ''}</div>
-                            <div style="font-size:11px; background:#1651a3; padding:2px 6px; border-radius:3px;">ID: ${voter.voterId || ''}</div>
+                            <h2>${displayIndex}. নাম: ${voter.name || ''}</h2>
+                            <span class="voter-id">ID: ${voter.voterId || ''}</span>
                         </div>
                         <div class="card-body">
                             <div class="info-line"><span class="info-label">পিতা:</span><span class="info-value">${voter.fatherName || ''}</span></div>
@@ -262,9 +298,9 @@
                                 <b>ঠিকানা:</b> ${voter.address || ''}
                             </div>
                             
-                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px; color:#888;">
-                                <span>এরিয়া কোড: 130777</span>
-                                <span style="background:#c2185b; color:white; padding:2px 8px; border-radius:10px; font-weight:bold;">পুরুষ</span>
+                            <!-- এরিয়া কোড পুরোপুরি রিমুভ করে শুধু ডানপাশে লিঙ্গ ট্যাগ রাখা হলো -->
+                            <div style="display:flex; justify-content:flex-end; margin-top:10px; font-size:12px;">
+                                <span class="gender-tag">পুরুষ</span>
                             </div>
                         </div>
                     </div>
@@ -282,8 +318,6 @@
             const fatherQuery = document.getElementById('searchFather').value.toLowerCase().trim();
             const motherQuery = document.getElementById('searchMother').value.toLowerCase().trim();
             const villageQuery = document.getElementById('searchVillage').value.toLowerCase().trim();
-            
-            // ইনপুট থেকে নেওয়া জন্ম তারিখের বাংলা শূন্যকে ব্যাকগ্রাউন্ডে অটোমেটিক কনভার্ট করা হচ্ছে
             const dobQuery = fixZero(document.getElementById('searchDob').value.trim());
             const idQuery = fixZero(document.getElementById('searchId').value.trim());
 
@@ -300,12 +334,11 @@
                 const matchMother = !motherQuery || (voter.motherName && voter.motherName.toLowerCase().includes(motherQuery));
                 const matchVillage = !villageQuery || (voter.address && voter.address.toLowerCase().includes(villageQuery));
                 
-                // ডাটাবেজের dob এবং ইনপুটের dob দুইটারই শূন্য কনভার্ট করে ম্যাচ করানো হচ্ছে
                 const voterDobFixed = voter.dob ? fixZero(voter.dob) : '';
                 const matchDob = !dobQuery || voterDobFixed.includes(dobQuery);
                 
                 const voterIdFixed = voter.voterId ? fixZero(voter.voterId) : '';
-                const matchId = !idQuery || voterIdFixed.includes(idQuery) || (voter.serial && fixZero(voter.serial).includes(idQuery));
+                const matchId = !idQuery || voterIdFixed.includes(idQuery) || (voter.serial && fixZero(String(voter.serial)).includes(idQuery));
 
                 return matchName && matchFather && matchMother && matchVillage && matchDob && matchId;
             });
