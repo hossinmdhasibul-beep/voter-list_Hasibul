@@ -12252,12 +12252,12 @@ const voterListMale = [
   },
   {
     serial: "1225",
-    name: "মোঃ মামুনুর রশিদ",
-    voterId: "৭৬১৬২৩২৮১২৮০",
-    fatherName: "মোঃ হাবিবুর রহমান",
-    motherName: "মোছাঃ রহেনা খাতুন",
-    profession: "ব্যবসা",
-    dob: "০১/০১/১৯৬০",
+    name: "মোঃ হাসিবুল হোসেন শান্ত",
+    voterId: "2417267925",
+    fatherName: "মোঃ বাবুল বিশ্বাস",
+    motherName: "মোছাঃ আনিছা বেগম",
+    profession: "ছাত্র",
+    dob: "২০/০৪/২০০৪",
     address: "গঙ্গারামপুর, পাবনা সদর, পাবনা"
   },
   {
