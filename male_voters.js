@@ -13492,12 +13492,12 @@ const voterListMale =[
   },
   {
     serial: "1350",
-    name: "মোঃ শাহিন আলী",
-    voterId: "৭৬১৬২৩২৮১৪০৫",
-    fatherName: "মোঃ হাবিবুর রহমান",
-    motherName: "মোছাঃ রহেনা খাতুন",
-    profession: "ব্যবসা",
-    dob: "০১/০১/১৯৬০",
+    name: "মোঃ রাব্বি হোসেন",
+    voterId: "৮২৭৮৯১১৫৩৫",
+    fatherName: "মোঃ হাচেন আলী",
+    motherName: "মোছাঃ ফাতেমা খাতুন",
+    profession: "ছাত্র",
+    dob: "০৫/০৬/২০০৬",
     address: "গঙ্গারামপুর, পাবনা সদর, পাবনা"
   },
   {
