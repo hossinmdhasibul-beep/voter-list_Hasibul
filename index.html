@@ -244,13 +244,11 @@
             </div>
         </div>
 
-        <!-- কাউন্টার বার -->
         <div class="info-bar">
             <span>Search your data, just a second</span>
             <span>ফলাফল: <span id="totalCount">০</span> জন</span>
         </div>
 
-        <!-- ভোটার ডাটা লিস্ট -->
         <div id="voterList">
             <div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">
                 উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
@@ -262,7 +260,6 @@
         Develop Hasibul
     </div>
 
-    <!-- আপনার ডাটা ফাইল লিংক (এখানে মেয়েদের নতুন ফাইলটি যুক্ত করা হলো) -->
     <script src="male_voters.js"></script>
     <script src="female_voters.js"></script>
 
@@ -281,7 +278,7 @@
             return String(str).replace(/[0-9]/g, w => bn[en.indexOf(w)]);
         }
 
-        // কার্ড ডিসপ্লে করার সময়ও আমরা লজিক বসিয়েছি যেন ডাটা ফাইল বাংলা হোক বা ইংলিশ—সঠিকভাবে শো করে
+        // কার্ড ডিসপ্লে করার ফাংশন
         function displayVoters(data) {
             const listContainer = document.getElementById('voterList');
             const totalCount = document.getElementById('totalCount');
@@ -297,7 +294,6 @@
             const limitedData = data.slice(0, 50);
 
             limitedData.forEach((voter) => {
-                // বাংলা এবং ইংলিশ দুই কি (Key) থেকেই ডাটা নেওয়ার ব্যবস্থা
                 const vSerial = voter.serial || voter["ক্রমিক নং"] || '১';
                 const vName = voter.name || voter["নাম"] || '';
                 const vId = voter.voterId || voter["ভোটার নং"] || '';
@@ -306,6 +302,9 @@
                 const vProfession = voter.profession || voter["পেশা"] || '';
                 const vDob = voter.dob || voter["জন্ম তারিখ"] || '';
                 const vAddress = voter.address || voter["ঠিকানা"] || '';
+
+                // 🌟 জেন্ডার নির্ধারণ লজিক: ফাইলে জেন্ডার থাকলে তা নিবে, অন্যথায় নামের ভিত্তিতে ছেলে/মেয়ে ট্যাগ বসাবে
+                const vGender = voter.gender || (vName.includes("মোছাঃ") || vName.includes("খাতুন") || vName.includes("বেগম") ? "মহিলা" : "পুরুষ");
 
                 let originalSerial = vSerial ? String(vSerial).replace(/^0+/, '') : '';
                 if (!originalSerial) originalSerial = '১';
@@ -335,7 +334,7 @@
                             </div>
                             
                             <div style="display:flex; justify-content:flex-end; margin-top:10px; font-size:12px;">
-                                <span class="gender-tag">पुरुष</span>
+                                <span class="gender-tag">${vGender}</span>
                             </div>
                         </div>
                     </div>
@@ -348,7 +347,7 @@
             }
         }
 
-        // মেইন সার্চ লজিক: এখানে ছেলেদের (voterListMale) এবং মেয়েদের (femaleVoters) দুটো ফাইলকেই একসাথে যুক্ত করা হয়েছে
+        // মেইন সার্চ লজিক
         function triggerSearch() {
             const nameQuery = document.getElementById('searchName').value.toLowerCase().trim();
             const fatherQuery = document.getElementById('searchFather').value.toLowerCase().trim();
@@ -362,14 +361,14 @@
                 return;
             }
 
-            const maleData = typeof voterListMale !== 'undefined' ? voterListMale : [];
-            const femaleData = typeof femaleVoters !== 'undefined' ? femaleVoters : [];
+            // 🌟 ছেলে ও মেয়ে উভয়ের ডাটা ফাইল থেকে আলাদা আইডেন্টিটি সহ অবজেক্ট তৈরি
+            const maleData = (typeof voterListMale !== 'undefined' ? voterListMale : []).map(v => ({...v, gender: "পুরুষ"}));
+            const femaleData = (typeof femaleVoters !== 'undefined' ? femaleVoters : []).map(v => ({...v, gender: "মহিলা"}));
             
-            // ছেলে ও মেয়েদের ডাটা এক সাথে মার্জ করা হলো
+            // ছেলে ও মেয়েদের ডাটা একসাথে এক করা হলো
             const targetData = [...maleData, ...femaleData];
 
             const filtered = targetData.filter(voter => {
-                // দুই ধরণের কি (Key) থেকেই ভ্যালু চেক করা হচ্ছে
                 const vName = (voter.name || voter["নাম"] || '').toLowerCase();
                 const vFather = (voter.fatherName || voter["পিতা"] || '').toLowerCase();
                 const vMother = (voter.motherName || voter["মাতা"] || voter["مাতা"] || '').toLowerCase();
@@ -398,9 +397,5 @@
             document.getElementById('searchVillage').value = '';
             document.getElementById('searchDob').value = '';
             document.getElementById('searchId').value = '';
-            document.getElementById('voterList').innerHTML = '<div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।</div>';
-            document.getElementById('totalCount').innerText = "০";
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('voterList').innerHTML = '<div style="text-align:
+                
