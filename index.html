@@ -1,269 +1,4 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hasibul Make voter search</title>
-    <!-- আপনার আগের কোডের ডিজাইন এবং স্টাইল যেমন ছিল, হুবহু তাই রাখা হয়েছে -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            margin-top: 20px;
-            box-sizing: border-box;
-        }
-
-        h1 {
-            text-align: center;
-            color: #007bff;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .filter-box {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .input-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .input-group label {
-            font-weight: bold;
-            width: 80px;
-            color: #333;
-        }
-
-        .input-group input, .input-group select {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .button-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .btn {
-            padding: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #fff;
-            transition: background 0.3s;
-        }
-
-        .btn-search {
-            background-color: #00a846;
-        }
-
-        .btn-search:hover {
-            background-color: #008f3a;
-        }
-
-        .btn-clear {
-            background-color: #dc3545;
-        }
-
-        .btn-clear:hover {
-            background-color: #c82333;
-        }
-
-        .info-bar {
-            width: 100%;
-            max-width: 500px;
-            background: #e3f2fd;
-            color: #0d47a1;
-            padding: 12px;
-            border-radius: 5px;
-            margin-top: 15px;
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-            font-size: 14px;
-            box-sizing: border-box;
-            border: 1px solid #bbdefb;
-        }
-
-        #voterList {
-            width: 100%;
-            max-width: 500px;
-            margin-top: 15px;
-            margin-bottom: 50px;
-        }
-
-        .voter-card {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #f4f7f6;
-            padding-bottom: 8px;
-            margin-bottom: 10px;
-        }
-
-        .card-header h2 {
-            margin: 0;
-            font-size: 18px;
-            color: #007bff;
-        }
-
-        .voter-id {
-            background: #f1f3f4;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .card-body {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .info-line {
-            display: flex;
-            font-size: 14px;
-        }
-
-        .info-label {
-            width: 90px;
-            font-weight: bold;
-            color: #666;
-        }
-
-        .info-value {
-            color: #333;
-            flex: 1;
-        }
-
-        .sub-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 8px;
-            padding: 8px;
-            background: #f9f9f9;
-            border-radius: 5px;
-            font-size: 13px;
-        }
-
-        .gender-tag {
-            background: #007bff;
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .footer-branding {
-            margin-top: auto;
-            padding: 15px;
-            font-size: 14px;
-            color: #888;
-            font-weight: bold;
-            text-align: center;
-            width: 100%;
-            background: #fff;
-            border-top: 1px solid #e0e0e0;
-            box-sizing: border-box;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1>Hasibul Make voter search</h1>
-
-        <div class="filter-box">
-            <div class="input-group">
-                <label>নাম:</label>
-                <input type="text" id="searchName" placeholder="লিখুন...">
-            </div>
-            <div class="input-group">
-                <label>পিতা:</label>
-                <input type="text" id="searchFather" placeholder="লিখুন...">
-            </div>
-            <div class="input-group">
-                <label>মাতা:</label>
-                <input type="text" id="searchMother" placeholder="লিখুন...">
-            </div>
-            <div class="input-group">
-                <label>গ্রাম:</label>
-                <input type="text" id="searchVillage" placeholder="লিখুন...">
-            </div>
-            <div class="input-group">
-                <label>জন্ম তারিখ:</label>
-                <input type="text" id="searchDob" placeholder="যেমন: ২০/০৪/২০০৪">
-            </div>
-            <div class="input-group">
-                <label>আইডি:</label>
-                <input type="text" id="searchId" placeholder="আইডি নং লিখুন...">
-            </div>
-
-            <div class="button-grid">
-                <button type="button" onclick="triggerSearch()" class="btn btn-search">সার্চ</button>
-                <button type="button" onclick="clearFilters()" class="btn btn-clear">ক্লিয়ার</button>
-            </div>
-        </div>
-
-        <!-- কাউন্টার বার -->
-        <div class="info-bar">
-            <span>Search your data, just a second</span>
-            <span>ফলাফল: <span id="totalCount">০</span> জন</span>
-        </div>
-
-        <!-- ভোটার ডাটা লিস্ট -->
-        <div id="voterList">
-            <div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">
-                উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-branding">
-        Develop Hasibul
-    </div>
-
-    <!-- 🌟 ডাটা ফাইল লিংক (ছেলে এবং মেয়ে দুই ফাইলই লিংক করা হলো) -->
+    <!-- আপনার ডাটা ফাইল লিংক (এখানে মেয়েদের নতুন ফাইলটি যুক্ত করা হলো) -->
     <script src="male_voters.js"></script>
     <script src="female_voters.js"></script>
 
@@ -282,6 +17,7 @@
             return String(str).replace(/[0-9]/g, w => bn[en.indexOf(w)]);
         }
 
+        // কার্ড ডিসপ্লে করার সময়ও আমরা লজিক বসিয়েছি যেন ডাটা ফাইল বাংলা হোক বা ইংলিশ—সঠিকভাবে শো করে
         function displayVoters(data) {
             const listContainer = document.getElementById('voterList');
             const totalCount = document.getElementById('totalCount');
@@ -297,6 +33,7 @@
             const limitedData = data.slice(0, 50);
 
             limitedData.forEach((voter) => {
+                // বাংলা এবং ইংলিশ দুই কি (Key) থেকেই ডাটা নেওয়ার ব্যবস্থা
                 const vSerial = voter.serial || voter["ক্রমিক নং"] || '১';
                 const vName = voter.name || voter["নাম"] || '';
                 const vId = voter.voterId || voter["ভোটার নং"] || '';
@@ -305,9 +42,6 @@
                 const vProfession = voter.profession || voter["পেশা"] || '';
                 const vDob = voter.dob || voter["জন্ম তারিখ"] || '';
                 const vAddress = voter.address || voter["ঠিকানা"] || '';
-                
-                // জেন্ডার স্বয়ংক্রিয়ভাবে নির্ধারণের লজিক (নামের টাইটেল দেখে জেন্ডার ট্যাগ চেঞ্জ হবে)
-                const vGender = voter.gender || (vName.includes("মোছাঃ") || vName.includes("খাতুন") || vName.includes("বেগম") ? "মহিলা" : "পুরুষ");
 
                 let originalSerial = vSerial ? String(vSerial).replace(/^0+/, '') : '';
                 if (!originalSerial) originalSerial = '১';
@@ -337,7 +71,7 @@
                             </div>
                             
                             <div style="display:flex; justify-content:flex-end; margin-top:10px; font-size:12px;">
-                                <span class="gender-tag" style="background: ${vGender === 'মহিলা' ? '#e91e63' : '#007bff'};">${vGender}</span>
+                                <span class="gender-tag">পুরুষ</span>
                             </div>
                         </div>
                     </div>
@@ -350,7 +84,7 @@
             }
         }
 
-        // 🌟 মেইন সার্চ লজিক: এখন এই ফাংশন ছেলে ও মেয়ে উভয়ের ডাটা ফাইল থেকেই আংশিক সার্চ রেজাল্ট নিয়ে আসবে!
+        // 🌟 মেইন সার্চ লজিক: এখানে ছেলেদের (voterListMale) এবং মেয়েদের (femaleVoters) দুটো ফাইলকে একসাথে যুক্ত করা হয়েছে
         function triggerSearch() {
             const nameQuery = document.getElementById('searchName').value.toLowerCase().trim();
             const fatherQuery = document.getElementById('searchFather').value.toLowerCase().trim();
@@ -364,14 +98,14 @@
                 return;
             }
 
-            // ছেলেদের এবং মেয়েদের দুই ফাইলের ডেটা লোড করা হচ্ছে
             const maleData = typeof voterListMale !== 'undefined' ? voterListMale : [];
             const femaleData = typeof femaleVoters !== 'undefined' ? femaleVoters : [];
             
-            // ছেলে ও মেয়েদের ডেটা একসাথে এক করে খোঁজা হচ্ছে
+            // ছেলে ও মেয়েদের ডাটা এক সাথে মার্জ করা হলো
             const targetData = [...maleData, ...femaleData];
 
             const filtered = targetData.filter(voter => {
+                // দুই ধরণের কি (Key) থেকেই ভ্যালু চেক করা হচ্ছে
                 const vName = (voter.name || voter["নাম"] || '').toLowerCase();
                 const vFather = (voter.fatherName || voter["পিতা"] || '').toLowerCase();
                 const vMother = (voter.motherName || voter["মাতা"] || voter["مাতা"] || '').toLowerCase();
@@ -380,7 +114,6 @@
                 const vId = fixZero(voter.voterId || voter["ভোটার নং"] || '');
                 const vSerial = fixZero(String(voter.serial || voter["ক্রমিক নং"] || ''));
 
-                // .includes() মেথডের কারণে আংশিক নাম লিখলেও নিখুঁতভাবে রেজাল্ট আসবে
                 const matchName = !nameQuery || vName.includes(nameQuery);
                 const matchFather = !fatherQuery || vFather.includes(fatherQuery);
                 const matchMother = !motherQuery || vMother.includes(motherQuery);
@@ -405,5 +138,4 @@
             document.getElementById('totalCount').innerText = "০";
         }
     </script>
-</body>
-</html>
+    
