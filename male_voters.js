@@ -9042,7 +9042,7 @@ const voterListMale =[
     },
     {
         "serial": "০৯০৫",
-        "name": "মোঃ ছায়াদুল্লাহ",
+        "name": "মোঃ হুজ্জাতুল্লাহ",
         "voterId": "৭৬১৬২৩০০০০২৬১",
         "fatherName": "মোঃ হাবিবুল্লাহ",
         "motherName": "মোছাঃ রাশেদা",
@@ -9082,7 +9082,7 @@ const voterListMale =[
     },
     {
         "serial": "০৯০৯",
-        "name": "মোঃ আসাদুল ইসলাম",
+        "name": "মোঃ আজাদুল ইসলাম",
         "voterId": "৭৬১৬২৩০০০০৩৮১",
         "fatherName": "মোঃ সিরাজুল হক নান্নু",
         "motherName": "মোছাঃ আমিরন খাতুন",
@@ -9162,7 +9162,7 @@ const voterListMale =[
     },
     {
         "serial": "০৯১৭",
-        "name": "মোঃ রতন হোসেন",
+        "name": "মোঃ শুভন হোসেন",
         "voterId": "৭৬১৬২৩০০০০১৬৪",
         "fatherName": "মোঃ হাসেম আলী",
         "motherName": "মোছাঃ খোদেজা খাতুন",
@@ -9172,7 +9172,7 @@ const voterListMale =[
     },
     {
         "serial": "০৯১৮",
-        "name": "মোঃ সাইদুল ইসলাম প্রাম",
+        "name": "মোঃ সাইদুল ইসলাম (অপু)",
         "voterId": "৭৬১৬২৩০০০০১৪০",
         "fatherName": "মোঃ আক্কাস আলী প্রাঃ",
         "motherName": "মোছাঃ লিলি খাতুন",
