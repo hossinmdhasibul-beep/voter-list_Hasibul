@@ -4,41 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hasibul Make voter search</title>
-    <!-- আপনার আগের কোডের লাল বর্ডারসহ সম্পূর্ণ ডিজাইন হুবহু অপরিবর্তিত রাখা হয়েছে -->
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f1f5f9;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            color: #334155;
         }
 
         .container {
             width: 100%;
             max-width: 500px;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            margin-top: 20px;
+            background: #ffffff;
+            padding: 25px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            margin-top: 25px;
             box-sizing: border-box;
+            border: 1px solid #e2e8f0;
         }
 
         h1 {
             text-align: center;
-            color: #007bff;
+            color: #0f172a;
             font-size: 24px;
-            margin-bottom: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
         }
 
         .filter-box {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
         }
 
         .input-group {
@@ -48,171 +51,197 @@
         }
 
         .input-group label {
-            font-weight: bold;
-            width: 80px;
-            color: #333;
+            font-weight: 600;
+            width: 90px;
+            color: #475569;
+            font-size: 15px;
         }
 
         .input-group input, .input-group select {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 11px 16px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
             box-sizing: border-box;
+            transition: all 0.2s ease;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
         .button-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
             margin-top: 10px;
         }
 
         .btn {
             padding: 12px;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 600;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             color: #fff;
-            transition: background 0.3s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .btn-search {
-            background-color: #00a846;
+            background-color: #10b981;
         }
 
         .btn-search:hover {
-            background-color: #008f3a;
+            background-color: #059669;
+            transform: translateY(-1px);
         }
 
         .btn-clear {
-            background-color: #dc3545;
+            background-color: #ef4444;
         }
 
         .btn-clear:hover {
-            background-color: #c82333;
+            background-color: #dc2626;
+            transform: translateY(-1px);
         }
 
         .info-bar {
             width: 100%;
             max-width: 500px;
-            background: #e3f2fd;
-            color: #0d47a1;
-            padding: 12px;
-            border-radius: 5px;
-            margin-top: 15px;
+            background: #eef2f6;
+            color: #334155;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 20px;
             display: flex;
             justify-content: space-between;
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 13px;
             box-sizing: border-box;
-            border: 1px solid #bbdefb;
+            border: 1px solid #e2e8f0;
         }
 
         #voterList {
             width: 100%;
             max-width: 500px;
-            margin-top: 15px;
-            margin-bottom: 50px;
+            margin-top: 20px;
+            margin-bottom: 60px;
         }
 
-        /* আপনার ইমেজে দেখানো লাল ডিজাইনের বর্ডার */
+        /* প্রিমিয়াম রুবি-রেড ডিজাইনের মডার্ন বর্ডার ও শ্যাডো */
         .voter-card {
             background: #fff;
-            border: 2px solid #ff4d6d;
-            border-radius: 8px;
+            border: 2px solid #e11d48;
+            border-radius: 12px;
             padding: 0px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.05), 0 4px 6px -4px rgba(225, 29, 72, 0.05);
             overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        
+        .voter-card:hover {
+            transform: translateY(-2px);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #007bff;
-            padding: 12px 15px;
+            background: #1e293b;
+            padding: 14px 18px;
             color: #fff;
         }
 
         .card-header h2 {
             margin: 0;
-            font-size: 16px;
+            font-size: 15px;
             color: #fff;
             flex: 1;
+            font-weight: 600;
         }
 
         .voter-id {
-            background: #0056b3;
-            padding: 4px 8px;
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 5px 10px;
+            border-radius: 6px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
             color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
         }
 
         .card-body {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            padding: 15px;
+            gap: 8px;
+            padding: 18px;
         }
 
         .info-line {
             display: flex;
             font-size: 14px;
-            border-bottom: 1px solid #f4f7f6;
-            padding-bottom: 4px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 6px;
         }
 
         .info-label {
-            width: 90px;
-            color: #666;
+            width: 95px;
+            color: #64748b;
+            font-weight: 500;
         }
 
         .info-value {
-            color: #333;
+            color: #1e293b;
             flex: 1;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .sub-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 8px;
-            padding: 8px;
-            background: #f9f9f9;
-            border-radius: 5px;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
             font-size: 13px;
-            border: 1px solid #eee;
+            border: 1px solid #edf2f7;
+            color: #475569;
         }
 
-        /* লাল ডিজাইনের জেন্ডার ট্যাগ */
+        /* প্রিমিয়াম জেন্ডার ট্যাগ */
         .gender-tag {
-            background: #c2005f;
+            background: #be123c;
             color: #fff;
-            padding: 4px 14px;
-            border-radius: 20px;
+            padding: 5px 16px;
+            border-radius: 50px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(190, 18, 60, 0.2);
         }
 
         .footer-branding {
             margin-top: auto;
-            padding: 15px;
-            font-size: 14px;
-            color: #888;
-            font-weight: bold;
+            padding: 20px;
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
             text-align: center;
             width: 100%;
             background: #fff;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #e2e8f0;
             box-sizing: border-box;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
@@ -253,15 +282,13 @@
             </div>
         </div>
 
-        <!-- কাউন্টার বার -->
         <div class="info-bar">
             <span>Search your data, just a second</span>
             <span>ফলাফল: <span id="totalCount">০</span> জন</span>
         </div>
 
-        <!-- ভোটার ডাটা লিস্ট -->
         <div id="voterList">
-            <div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">
+            <div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#64748b; border:1px solid #e2e8f0; font-weight: 600; font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
                 উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
             </div>
         </div>
@@ -271,7 +298,6 @@
         Develop Hasibul
     </div>
 
-    <!-- ডাটা ফাইল দুটি লিংক করা হলো -->
     <script src="male_voters.js"></script>
     <script src="female_voters.js"></script>
 
@@ -298,7 +324,7 @@
             totalCount.innerText = data.length;
 
             if (!data || data.length === 0) {
-                listContainer.innerHTML = '<div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#999; border:1px solid #ccc;">কোনো তথ্য পাওয়া যায়নি!</div>';
+                listContainer.innerHTML = '<div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#94a3b8; border:1px solid #e2e8f0; font-weight:600;">কোনো তথ্য পাওয়া যায়নি!</div>';
                 return;
             }
 
@@ -314,7 +340,6 @@
                 const vDob = voter.dob || voter["জন্ম তারিখ"] || '';
                 const vAddress = voter.address || voter["ঠিকানা"] || '';
 
-                // 🌟 জেন্ডার ভ্যালু স্বয়ংক্রিয়ভাবে নির্ধারণ করা হবে
                 const vGender = voter.gender || "পুরুষ";
 
                 let originalSerial = vSerial ? String(vSerial).replace(/^0+/, '') : '';
@@ -340,11 +365,11 @@
                                 <div style="grid-column: span 2;"><b>ডাকঘর:</b> চাড়াডাঙ্গা</div>
                             </div>
                             
-                            <div style="font-size:12px; margin-top:8px; padding:8px; background:#fafafa; border-radius:4px; border:1px solid #eee;">
+                            <div style="font-size:13px; margin-top:10px; padding:10px; background:#f8fafc; border-radius:6px; border:1px solid #edf2f7; color: #475569; line-height: 1.4;">
                                 <b>ঠিকানা:</b> ${vAddress}
                             </div>
                             
-                            <div style="display:flex; justify-content:flex-end; margin-top:10px; font-size:12px;">
+                            <div style="display:flex; justify-content:flex-end; margin-top:12px; font-size:12px;">
                                 <span class="gender-tag">${vGender}</span>
                             </div>
                         </div>
@@ -354,7 +379,7 @@
             });
 
             if(data.length > 50) {
-                listContainer.innerHTML += `<div style="text-align:center; padding:10px; color:#666; font-size:13px;">আরও ${(data.length - 50)} টি রেজাল্ট ফিল্টার করা হয়েছে। নির্দিষ্ট করতে আরও লিখুন...</div>`;
+                listContainer.innerHTML += `<div style="text-align:center; padding:15px; color:#64748b; font-size:13px; font-weight:500;">আরও ${(data.length - 50)} টি রেজাল্ট ফিল্টার করা হয়েছে। নির্দিষ্ট করতে আরও লিখুন...</div>`;
             }
         }
 
@@ -371,7 +396,6 @@
                 return;
             }
 
-            // 🌟 ডাটা ফিল্টারিং এর সময় অবজেক্টে নির্দিষ্ট জেন্ডার প্রোপার্টি ট্যাগ করে দেওয়া হলো
             const maleData = (typeof voterListMale !== 'undefined' ? voterListMale : []).map(v => ({...v, gender: "পুরুষ"}));
             const femaleData = (typeof femaleVoters !== 'undefined' ? femaleVoters : []).map(v => ({...v, gender: "মহিলা"}));
             
@@ -406,7 +430,7 @@
             document.getElementById('searchVillage').value = '';
             document.getElementById('searchDob').value = '';
             document.getElementById('searchId').value = '';
-            document.getElementById('voterList').innerHTML = '<div style="text-align:center; padding:30px; background:white; border-radius:8px; color:#666; border:1px solid #ccc; font-weight: bold;">উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।</div>';
+            document.getElementById('voterList').innerHTML = '<div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#64748b; border:1px solid #e2e8f0; font-weight: 600; font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।</div>';
             document.getElementById('totalCount').innerText = "০";
         }
     </script>
