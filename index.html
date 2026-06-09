@@ -214,10 +214,119 @@
             border-top: 1px solid #e0e0e0;
             box-sizing: border-box;
         }
+
+        /* ==========================================
+           অ্যাকাউন্ট তৈরির নতুন পপ-আপ (Modal) স্টাইল 
+           ========================================== */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .auth-modal {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            box-sizing: border-box;
+            border: 2px solid #007bff;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .auth-modal h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .auth-group {
+            margin-bottom: 15px;
+        }
+
+        .auth-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .auth-group input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .auth-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-auth:hover {
+            background: #0056b3;
+        }
     </style>
 </head>
 <body>
 
+    <!-- অ্যাকাউন্ট ক্রিয়েশন পপ-আপ ফর্ম -->
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-modal">
+            <h2>একটি অ্যাকাউন্ট তৈরি করুন</h2>
+            <form id="registerForm" onsubmit="handleRegistration(event)">
+                <div class="auth-group">
+                    <label for="regName">আপনার নাম:</label>
+                    <input type="text" id="regName" placeholder="সম্পূর্ণ নাম লিখুন" required>
+                </div>
+                <div class="auth-group">
+                    <label for="regEmail">ইমেইল ঠিকানা:</label>
+                    <input type="email" id="regEmail" placeholder="example@gmail.com" required>
+                </div>
+                <div class="auth-group">
+                    <label for="regPassword">পাসওয়ার্ড:</label>
+                    <input type="password" id="regPassword" placeholder="কমপক্ষে ৬ সংখ্যার পাসওয়ার্ড" minlength="6" required>
+                </div>
+                <button type="submit" class="btn-auth">অ্যাকাউন্ট তৈরি করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- আপনার মূল সাইটের কন্টেন্ট -->
     <div class="container">
         <h1>Hasibul Make voter search</h1>
 
@@ -276,9 +385,46 @@
     <script src="female_voters.js"></script>
 
     <script>
+        // উইন্ডো লোড হওয়ার সাথে সাথে অ্যাকাউন্ট চেক করা এবং ইনিশিয়াল সেটআপ
         window.onload = function() {
             document.getElementById('totalCount').innerText = "০";
+            checkUserAuth();
         };
+
+        // ইউজার আগে থেকেই রেজিস্টার্ড কি না তা চেক করার ফাংশন
+        function checkUserAuth() {
+            const isRegistered = localStorage.getItem('userRegistered');
+            const overlay = document.getElementById('authOverlay');
+            
+            if (isRegistered === 'true') {
+                overlay.style.display = 'none'; // অ্যাকাউন্ট করা থাকলে পপ-আপ লুকিয়ে যাবে
+            } else {
+                overlay.style.display = 'flex'; // অ্যাকাউন্ট না করা থাকলে পপ-আপ দেখাবে
+            }
+        }
+
+        // রেজিস্ট্রেশন ফর্ম সাবমিট হ্যান্ডলার
+        function handleRegistration(event) {
+            event.preventDefault(); // পেজ রিফ্রেশ হওয়া বন্ধ করবে
+            
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+
+            if (name && email && password.length >= 6) {
+                // ডাটা ব্রাউজারের লোকাল মেমোরিতে সেভ করা হচ্ছে
+                localStorage.setItem('userRegistered', 'true');
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userEmail', email);
+
+                alert("অভিনন্দন " + name + "! আপনার অ্যাকাউন্টটি সফলভাবে তৈরি হয়েছে।");
+                
+                // পপ-আপটি হাইড করে দেওয়া হচ্ছে
+                document.getElementById('authOverlay').style.display = 'none';
+            } else {
+                alert("অনুগ্রহ করে সব তথ্য সঠিকভাবে পূরণ করুন।");
+            }
+        }
 
         function fixZero(str) {
             return str.replace(/০/g, '0');
@@ -314,7 +460,6 @@
                 const vDob = voter.dob || voter["জন্ম তারিখ"] || '';
                 const vAddress = voter.address || voter["ঠিকানা"] || '';
 
-                // 🌟 জেন্ডার ভ্যালু স্বয়ংক্রিয়ভাবে নির্ধারণ করা হবে
                 const vGender = voter.gender || "পুরুষ";
 
                 let originalSerial = vSerial ? String(vSerial).replace(/^0+/, '') : '';
@@ -371,7 +516,6 @@
                 return;
             }
 
-            // 🌟 ডাটা ফিল্টারিং এর সময় অবজেক্টে নির্দিষ্ট জেন্ডার প্রোপার্টি ট্যাগ করে দেওয়া হলো
             const maleData = (typeof voterListMale !== 'undefined' ? voterListMale : []).map(v => ({...v, gender: "পুরুষ"}));
             const femaleData = (typeof femaleVoters !== 'undefined' ? femaleVoters : []).map(v => ({...v, gender: "মহিলা"}));
             
