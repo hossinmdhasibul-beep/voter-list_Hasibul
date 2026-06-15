@@ -336,6 +336,7 @@
 </head>
 <body>
 
+    <!-- লক স্ক্রিন সেকশন -->
     <div id="lockScreen">
         <div class="lock-container">
             <h2>সিকিউরিটি পিন লিখুন</h2>
@@ -348,6 +349,7 @@
         </div>
     </div>
 
+    <!-- মেইন অ্যাপ কন্টেন্ট -->
     <div id="mainContent">
         <div class="container">
             <h1>Hasibul Make voter search</h1>
@@ -405,7 +407,6 @@
     <script src="female_voters.js"></script>
 
     <script>
-        // লক স্ক্রিন ভেরিফিকেশন ফাংশন
         const CORRECT_PIN = "3366"; 
 
         function verifyPin() {
@@ -437,6 +438,18 @@
                 result = result.replace(new RegExp(bn[i], 'g'), en[i]);
             }
             return result;
+        }
+
+        // আংশিক মিল (Partial Match) ধরার জন্য টেক্সটকে একদম ভেঙে পিউরিফাই করার ফাংশন
+        function cleanText(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/ঃ/g, '')  // বিসর্গ দূরীকরণ
+                .replace(/ং/g, '')  // অনুস্বার দূরীকরণ
+                .replace(/[\u200B-\u200D\uFEFF]/g, '') // স্পেশাল ও অদৃশ্য ক্যারেক্টার ক্লিন
+                .replace(/\s+/g, '') // সব স্পেস বা ফাঁকা জায়গা মুছে ফেলা
+                .toLowerCase()       // ইংরেজি লেটার থাকলে ছোট হাতের করা
+                .trim();
         }
 
         function enToBnNumber(str) {
@@ -532,20 +545,21 @@
             const targetData = [...maleData, ...femaleData];
 
             const filtered = targetData.filter(voter => {
-                const vName = String(voter["নাম"] !== undefined ? voter["নাম"] : (voter.name || '')).trim();
-                const vFather = String(voter["পিতা"] !== undefined ? voter["পিতা"] : (voter.fatherName || '')).trim();
-                const vMother = String(voter["মাতা"] !== undefined ? voter["মাতা"] : (voter.motherName || '')).trim();
-                const vAddress = String(voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : (voter.address || '')).trim();
-                const vDob = String(voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : (voter.dob || '')).trim();
+                const vName = String(voter["নাম"] !== undefined ? voter["নাম"] : (voter.name || ''));
+                const vFather = String(voter["পিতা"] !== undefined ? voter["পিতা"] : (voter.fatherName || ''));
+                const vMother = String(voter["মাতা"] !== undefined ? voter["মাতা"] : (voter.motherName || ''));
+                const vAddress = String(voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : (voter.address || ''));
+                const vDob = String(voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : (voter.dob || ''));
                 
                 const vIdRaw = String(voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : (voter.voterId || '')).trim();
                 const vSerialRaw = String(voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : (voter.serial || '')).trim();
 
-                const matchName = !nameQuery || vName.includes(nameQuery);
-                const matchFather = !fatherQuery || vFather.includes(fatherQuery);
-                const matchMother = !motherQuery || vMother.includes(motherQuery);
-                const matchVillage = !villageQuery || vAddress.includes(villageQuery);
-                const matchDob = !dobQuery || vDob.includes(dobQuery);
+                // আংশিক লেখা/অল্প কী-ওয়ার্ড ম্যাচিং কন্ডিশন
+                const matchName = !nameQuery || cleanText(vName).includes(cleanText(nameQuery));
+                const matchFather = !fatherQuery || cleanText(vFather).includes(cleanText(fatherQuery));
+                const matchMother = !motherQuery || cleanText(vMother).includes(cleanText(motherQuery));
+                const matchVillage = !villageQuery || cleanText(vAddress).includes(cleanText(villageQuery));
+                const matchDob = !dobQuery || cleanText(vDob).includes(cleanText(dobQuery));
                 
                 const normalizedIdQuery = fixZero(idQuery);
                 const normalizedVId = fixZero(vIdRaw);
