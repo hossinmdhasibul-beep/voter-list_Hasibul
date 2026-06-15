@@ -336,7 +336,6 @@
 </head>
 <body>
 
-    <!-- লক স্ক্রিন সেকশন -->
     <div id="lockScreen">
         <div class="lock-container">
             <h2>সিকিউরিটি পিন লিখুন</h2>
@@ -349,7 +348,6 @@
         </div>
     </div>
 
-    <!-- মেইন অ্যাপ কন্টেন্ট -->
     <div id="mainContent">
         <div class="container">
             <h1>Hasibul Make voter search</h1>
@@ -408,14 +406,13 @@
 
     <script>
         // লক স্ক্রিন ভেরিফিকেশন ফাংশন
-        const CORRECT_PIN = "3366"; // এখানে আপনার পছন্দের ৪ ডিজিটের পিন কোড সেট করুন
+        const CORRECT_PIN = "3366"; 
 
         function verifyPin() {
             const userInput = document.getElementById('pinInput').value;
             if (userInput === CORRECT_PIN) {
                 document.getElementById('lockScreen').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'flex';
-                // ফোকাস ক্লিয়ার করা যাতে কিবোর্ড নেমে যায়
                 document.getElementById('pinInput').blur();
             } else {
                 alert("ভুল পিন কোড! আবার চেষ্টা করুন।");
@@ -425,7 +422,6 @@
         }
 
         window.onload = function() {
-            // লোড হওয়ার সাথে সাথে কন্টেন্ট হাইড এবং লক স্ক্রিন ডিসপ্লে নিশ্চিত করা
             document.getElementById('mainContent').style.display = 'none';
             document.getElementById('lockScreen').style.display = 'flex';
             document.getElementById('pinInput').focus();
@@ -433,10 +429,18 @@
         };
 
         function fixZero(str) {
-            return str.replace(/০/g, '0');
+            if (!str) return '';
+            const bn = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+            const en = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+            let result = String(str);
+            for (let i = 0; i < 10; i++) {
+                result = result.replace(new RegExp(bn[i], 'g'), en[i]);
+            }
+            return result;
         }
 
         function enToBnNumber(str) {
+            if (!str) return '';
             const en = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
             const bn = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
             return String(str).replace(/[0-9]/g, w => bn[en.indexOf(w)]);
@@ -457,7 +461,7 @@
             const limitedData = data.slice(0, 50);
 
             limitedData.forEach((voter) => {
-                const vSerial = voter["क्रमिक नং"] !== undefined ? voter["क्रमিক नং"] : voter.serial;
+                const vSerial = voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : voter.serial;
                 const vName = voter["নাম"] !== undefined ? voter["নাম"] : voter.name;
                 const vId = voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : voter.voterId;
                 const vFather = voter["পিতা"] !== undefined ? voter["পিতা"] : voter.fatherName;
@@ -533,15 +537,25 @@
                 const vMother = String(voter["মাতা"] !== undefined ? voter["মাতা"] : (voter.motherName || '')).trim();
                 const vAddress = String(voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : (voter.address || '')).trim();
                 const vDob = String(voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : (voter.dob || '')).trim();
-                const vId = String(voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : (voter.voterId || '')).trim();
-                const vSerial = String(voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : (voter.serial || '')).trim();
+                
+                const vIdRaw = String(voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : (voter.voterId || '')).trim();
+                const vSerialRaw = String(voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : (voter.serial || '')).trim();
 
                 const matchName = !nameQuery || vName.includes(nameQuery);
                 const matchFather = !fatherQuery || vFather.includes(fatherQuery);
                 const matchMother = !motherQuery || vMother.includes(motherQuery);
                 const matchVillage = !villageQuery || vAddress.includes(villageQuery);
                 const matchDob = !dobQuery || vDob.includes(dobQuery);
-                const matchId = !idQuery || vId.includes(idQuery) || vSerial.includes(idQuery);
+                
+                const normalizedIdQuery = fixZero(idQuery);
+                const normalizedVId = fixZero(vIdRaw);
+                const normalizedVSerial = fixZero(vSerialRaw);
+
+                const matchId = !idQuery || 
+                                vIdRaw.includes(idQuery) || 
+                                vSerialRaw.includes(idQuery) || 
+                                normalizedVId.includes(normalizedIdQuery) || 
+                                normalizedVSerial.includes(normalizedIdQuery);
 
                 return matchName && matchFather && matchMother && matchVillage && matchDob && matchId;
             });
