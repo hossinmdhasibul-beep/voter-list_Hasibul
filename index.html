@@ -27,29 +27,20 @@
             margin-top: 30px;
             box-sizing: border-box;
             border: 1px solid #e2e8f0;
+            overflow: hidden;
         }
 
-        /* Hasibul Make voter search এর নিচের কালার ডিজাইন */
+        /* Hasibul Make voter search এর ব্যাকগ্রাউন্ডে প্রিমিয়াম কালার */
         h1 {
             text-align: center;
-            color: #0f172a;
-            font-size: 24px;
+            color: #ffffff;
+            font-size: 22px;
             font-weight: 700;
-            margin-bottom: 25px;
+            margin: -25px -25px 25px -25px; /* কন্টেইনারের সাথে মিলিয়ে টপ-লেফট-রাইট ফুল উইডথ করা হয়েছে */
+            padding: 20px;
             letter-spacing: -0.5px;
-            position: relative;
-            padding-bottom: 12px;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 25%;
-            width: 50%;
-            height: 4px;
-            background: linear-gradient(90deg, #6366f1, #10b981);
-            border-radius: 10px;
+            background: linear-gradient(135deg, #4f46e5, #6366f1); /* আকর্ষণীয় রয়্যাল ব্লু-ভায়োলেট ব্যাকগ্রাউন্ড */
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
         }
 
         .filter-box {
@@ -245,7 +236,7 @@
             box-shadow: 0 2px 4px rgba(190, 18, 60, 0.2);
         }
 
-        /* Develop Hasibul এর নিচের কালার ডিজাইন */
+        /* Develop Hasibul এর নিচের প্রীমিয়াম কালার বার ডিজাইন */
         .footer-branding {
             margin-top: auto;
             padding: 24px;
@@ -265,9 +256,9 @@
             content: '';
             position: absolute;
             bottom: 12px;
-            left: 45%;
-            width: 10%;
-            height: 3px;
+            left: 44%;
+            width: 12%;
+            height: 4px;
             background: linear-gradient(90deg, #10b981, #6366f1);
             border-radius: 10px;
         }
