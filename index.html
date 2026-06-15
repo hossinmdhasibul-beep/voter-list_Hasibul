@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
             margin: 0;
             padding: 0;
             display: flex;
@@ -22,13 +22,14 @@
             max-width: 500px;
             background: #ffffff;
             padding: 25px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            border-radius: 16px;
-            margin-top: 25px;
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.05), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
+            border-radius: 20px;
+            margin-top: 30px;
             box-sizing: border-box;
             border: 1px solid #e2e8f0;
         }
 
+        /* Hasibul Make voter search এর নিচের কালার ডিজাইন */
         h1 {
             text-align: center;
             color: #0f172a;
@@ -36,6 +37,19 @@
             font-weight: 700;
             margin-bottom: 25px;
             letter-spacing: -0.5px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #10b981);
+            border-radius: 10px;
         }
 
         .filter-box {
@@ -59,12 +73,12 @@
 
         .input-group input, .input-group select {
             flex: 1;
-            padding: 11px 16px;
+            padding: 12px 16px;
             border: 1.5px solid #cbd5e1;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 15px;
             box-sizing: border-box;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             background-color: #f8fafc;
             color: #1e293b;
         }
@@ -73,7 +87,7 @@
             outline: none;
             border-color: #6366f1;
             background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
         }
 
         .button-grid {
@@ -84,15 +98,15 @@
         }
 
         .btn {
-            padding: 12px;
+            padding: 13px;
             font-size: 16px;
             font-weight: 600;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             color: #fff;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
         }
 
         .btn-search {
@@ -102,6 +116,7 @@
         .btn-search:hover {
             background-color: #059669;
             transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.2);
         }
 
         .btn-clear {
@@ -111,16 +126,17 @@
         .btn-clear:hover {
             background-color: #dc2626;
             transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(239, 68, 68, 0.2);
         }
 
         .info-bar {
             width: 100%;
             max-width: 500px;
-            background: #eef2f6;
+            background: #f1f5f9;
             color: #334155;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-top: 20px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-top: 25px;
             display: flex;
             justify-content: space-between;
             font-weight: 600;
@@ -136,20 +152,20 @@
             margin-bottom: 60px;
         }
 
-        /* প্রিমিয়াম রুবি-রেড ডিজাইনের মডার্ন বর্ডার ও শ্যাডো */
         .voter-card {
             background: #fff;
             border: 2px solid #e11d48;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 0px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.05), 0 4px 6px -4px rgba(225, 29, 72, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.04), 0 4px 6px -4px rgba(225, 29, 72, 0.04);
             overflow: hidden;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         
         .voter-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 20px -3px rgba(225, 29, 72, 0.08);
         }
 
         .card-header {
@@ -219,7 +235,6 @@
             color: #475569;
         }
 
-        /* প্রিমিয়াম জেন্ডার ট্যাগ */
         .gender-tag {
             background: #be123c;
             color: #fff;
@@ -230,18 +245,31 @@
             box-shadow: 0 2px 4px rgba(190, 18, 60, 0.2);
         }
 
+        /* Develop Hasibul এর নিচের কালার ডিজাইন */
         .footer-branding {
             margin-top: auto;
-            padding: 20px;
-            font-size: 13px;
-            color: #64748b;
-            font-weight: 600;
+            padding: 24px;
+            font-size: 14px;
+            color: #475569;
+            font-weight: 700;
             text-align: center;
             width: 100%;
             background: #fff;
             border-top: 1px solid #e2e8f0;
             box-sizing: border-box;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            position: relative;
+        }
+
+        .footer-branding::after {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 45%;
+            width: 10%;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #6366f1);
+            border-radius: 10px;
         }
     </style>
 </head>
