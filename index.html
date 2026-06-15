@@ -414,6 +414,7 @@
             if (userInput === CORRECT_PIN) {
                 document.getElementById('lockScreen').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'flex';
+                document.body.scrollIntoView();
                 document.getElementById('pinInput').blur();
             } else {
                 alert("ভুল পিন কোড! আবার চেষ্টা করুন।");
@@ -440,15 +441,15 @@
             return result;
         }
 
-        // আংশিক মিল (Partial Match) ধরার জন্য টেক্সটকে একদম ভেঙে পিউরিফাই করার ফাংশন
+        // আংশিক মিল এবং স্পেশাল ক্যারেক্টার হ্যান্ডেল করার জন্য ইউনিফর্ম টেক্সট ফাংশন
         function cleanText(str) {
             if (!str) return '';
             return String(str)
-                .replace(/ঃ/g, '')  // বিসর্গ দূরীকরণ
-                .replace(/ং/g, '')  // অনুস্বার দূরীকরণ
-                .replace(/[\u200B-\u200D\uFEFF]/g, '') // স্পেশাল ও অদৃশ্য ক্যারেক্টার ক্লিন
-                .replace(/\s+/g, '') // সব স্পেস বা ফাঁকা জায়গা মুছে ফেলা
-                .toLowerCase()       // ইংরেজি লেটার থাকলে ছোট হাতের করা
+                .replace(/ঃ/g, '')  
+                .replace(/ং/g, '')  
+                .replace(/[\u200B-\u200D\uFEFF]/g, '') 
+                .replace(/\s+/g, '') 
+                .toLowerCase()       
                 .trim();
         }
 
@@ -474,33 +475,19 @@
             const limitedData = data.slice(0, 50);
 
             limitedData.forEach((voter) => {
-                const vSerial = voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : voter.serial;
-                const vName = voter["নাম"] !== undefined ? voter["নাম"] : voter.name;
-                const vId = voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : voter.voterId;
-                const vFather = voter["পিতা"] !== undefined ? voter["পিতা"] : voter.fatherName;
-                const vMother = voter["মাতা"] !== undefined ? voter["মাতা"] : voter.motherName;
-                const vProfession = voter["পেশা"] !== undefined ? voter["পেশা"] : voter.profession;
-                const vDob = voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : voter.dob;
-                const vAddress = voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : voter.address;
-
-                const vGender = voter.gender || "পুরুষ";
-
-                let originalSerial = vSerial ? String(vSerial).replace(/^0+/, '') : '';
-                if (!originalSerial) originalSerial = '১';
-                
-                const displayIndex = enToBnNumber(originalSerial).padStart(2, '০'); 
+                const displayIndex = enToBnNumber(voter.cleanSerial).padStart(2, '০'); 
                 
                 const card = `
                     <div class="voter-card">
                         <div class="card-header">
-                            <h2>${displayIndex}. নাম: ${vName || ''}</h2>
-                            <span class="voter-id">ID: ${vId || ''}</span>
+                            <h2>${displayIndex}. নাম: ${voter.rawName || ''}</h2>
+                            <span class="voter-id">ID: ${voter.rawId || ''}</span>
                         </div>
                         <div class="card-body">
-                            <div class="info-line"><span class="info-label">পিতা:</span><span class="info-value">${vFather || ''}</span></div>
-                            <div class="info-line"><span class="info-label">মাতা:</span><span class="info-value">${vMother || ''}</span></div>
-                            <div class="info-line"><span class="info-label">পেশা:</span><span class="info-value">${vProfession || ''}</span></div>
-                            <div class="info-line"><span class="info-label">জন্ম তারিখ:</span><span class="info-value">${vDob || ''}</span></div>
+                            <div class="info-line"><span class="info-label">পিতা:</span><span class="info-value">${voter.rawFather || ''}</span></div>
+                            <div class="info-line"><span class="info-label">মাতা:</span><span class="info-value">${voter.rawMother || ''}</span></div>
+                            <div class="info-line"><span class="info-label">পেশা:</span><span class="info-value">${voter.rawProfession || ''}</span></div>
+                            <div class="info-line"><span class="info-label">জন্ম তারিখ:</span><span class="info-value">${voter.rawDob || ''}</span></div>
                             
                             <div class="sub-grid">
                                 <div><b>ওয়ার্ড নং:</b> ০৬</div>
@@ -509,11 +496,11 @@
                             </div>
                             
                             <div style="font-size:13px; margin-top:10px; padding:10px; background:#f8fafc; border-radius:6px; border:1px solid #edf2f7; color: #475569; line-height: 1.4;">
-                                <b>ঠিকানা:</b> ${vAddress || ''}
+                                <b>ঠিকানা:</b> ${voter.rawAddress || ''}
                             </div>
                             
                             <div style="display:flex; justify-content:flex-end; margin-top:12px; font-size:12px;">
-                                <span class="gender-tag">${vGender}</span>
+                                <span class="gender-tag">${voter.gender}</span>
                             </div>
                         </div>
                     </div>
@@ -539,39 +526,58 @@
                 return;
             }
 
-            const maleData = (typeof voterListMale !== 'undefined' ? voterListMale : []).map(v => ({...v, gender: "পুরুষ"}));
-            const femaleData = (typeof femaleVoters !== 'undefined' ? femaleVoters : []).map(v => ({...v, gender: "মহিলা"}));
+            const maleRaw = (typeof voterListMale !== 'undefined' ? voterListMale : []);
+            const femaleRaw = (typeof femaleVoters !== 'undefined' ? femaleVoters : []);
             
-            const targetData = [...maleData, ...femaleData];
+            // সর্বজনীন বা কমন ডাটাবেজ তৈরি (ছেলে ও মেয়ে ডাটার সব ফিল্ডকে একই কাঠামোতে আনা)
+            const masterList = [];
 
-            const filtered = targetData.filter(voter => {
-                const vName = String(voter["নাম"] !== undefined ? voter["নাম"] : (voter.name || ''));
-                const vFather = String(voter["পিতা"] !== undefined ? voter["পিতা"] : (voter.fatherName || ''));
-                const vMother = String(voter["মাতা"] !== undefined ? voter["মাতা"] : (voter.motherName || ''));
-                const vAddress = String(voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : (voter.address || ''));
-                const vDob = String(voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : (voter.dob || ''));
+            maleRaw.forEach(voter => {
+                const ser = String(voter["ক্রমিক নং"] || '').trim().replace(/^0+/, '');
+                masterList.push({
+                    rawName: String(voter["নাম"] || '').trim(),
+                    rawFather: String(voter["পিতা"] || '').trim(),
+                    rawMother: String(voter["মাতা"] || '').trim(),
+                    rawAddress: String(voter["ঠিকানা"] || '').trim(),
+                    rawDob: String(voter["জন্ম তারিখ"] || '').trim(),
+                    rawId: String(voter["ভোটার নং"] || '').trim(),
+                    rawProfession: String(voter["পেশা"] || '').trim(),
+                    cleanSerial: ser || '১',
+                    gender: "পুরুষ"
+                });
+            });
+
+            femaleRaw.forEach(voter => {
+                const ser = String(voter.serial || voter["ক্রমিক নং"] || '').trim().replace(/^0+/, '');
+                masterList.push({
+                    rawName: String(voter.name || voter["নাম"] || '').trim(),
+                    rawFather: String(voter.fatherName || voter["পিতা"] || '').trim(),
+                    rawMother: String(voter.motherName || voter["মাতা"] || '').trim(),
+                    rawAddress: String(voter.address || voter["ঠিকানা"] || '').trim(),
+                    rawDob: String(voter.dob || voter["জন্ম তারিখ"] || '').trim(),
+                    rawId: String(voter.voterId || voter["ভোটার নং"] || '').trim(),
+                    rawProfession: String(voter.profession || voter["পেশা"] || '').trim(),
+                    cleanSerial: ser || '১',
+                    gender: "মহিলা"
+                });
+            });
+
+            // নিখুঁত আংশিক মিল (Partial Sequence Filter) লজিক
+            const filtered = masterList.filter(voter => {
+                if(nameQuery && !cleanText(voter.rawName).includes(cleanText(nameQuery))) return false;
+                if(fatherQuery && !cleanText(voter.rawFather).includes(cleanText(fatherQuery))) return false;
+                if(motherQuery && !cleanText(voter.rawMother).includes(cleanText(motherQuery))) return false;
+                if(villageQuery && !cleanText(voter.rawAddress).includes(cleanText(villageQuery))) return false;
+                if(dobQuery && !cleanText(voter.rawDob).includes(cleanText(dobQuery))) return false;
                 
-                const vIdRaw = String(voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : (voter.voterId || '')).trim();
-                const vSerialRaw = String(voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : (voter.serial || '')).trim();
+                if(idQuery) {
+                    const normalizedIdQuery = fixZero(idQuery);
+                    const normalizedVId = fixZero(voter.rawId);
+                    const normalizedVSerial = fixZero(voter.cleanSerial);
+                    if(!voter.rawId.includes(idQuery) && !voter.cleanSerial.includes(idQuery) && !normalizedVId.includes(normalizedIdQuery) && !normalizedVSerial.includes(normalizedIdQuery)) return false;
+                }
 
-                // আংশিক লেখা/অল্প কী-ওয়ার্ড ম্যাচিং কন্ডিশন
-                const matchName = !nameQuery || cleanText(vName).includes(cleanText(nameQuery));
-                const matchFather = !fatherQuery || cleanText(vFather).includes(cleanText(fatherQuery));
-                const matchMother = !motherQuery || cleanText(vMother).includes(cleanText(motherQuery));
-                const matchVillage = !villageQuery || cleanText(vAddress).includes(cleanText(villageQuery));
-                const matchDob = !dobQuery || cleanText(vDob).includes(cleanText(dobQuery));
-                
-                const normalizedIdQuery = fixZero(idQuery);
-                const normalizedVId = fixZero(vIdRaw);
-                const normalizedVSerial = fixZero(vSerialRaw);
-
-                const matchId = !idQuery || 
-                                vIdRaw.includes(idQuery) || 
-                                vSerialRaw.includes(idQuery) || 
-                                normalizedVId.includes(normalizedIdQuery) || 
-                                normalizedVSerial.includes(normalizedIdQuery);
-
-                return matchName && matchFather && matchMother && matchVillage && matchDob && matchId;
+                return true;
             });
 
             displayVoters(filtered);
