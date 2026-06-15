@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f8fafc;
+            background-color: #f1f5f9;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,141 +17,281 @@
             color: #334155;
         }
 
-        /* সিক্রেট পিন লক স্ক্রিন */
-        #secretLockScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top right, #312e81, #0f172a);
-            z-index: 99999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.4s ease;
+        /* সিক্রেট লক সিস্টেম ডিজাইন */
+        #lockScreen { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: #1e293b; 
+            z-index: 9999; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            color: white; 
         }
-
-        .lock-container {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 360px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+        #lockScreen input { 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #cbd5e1; 
+            margin-bottom: 12px; 
+            text-align: center; 
+            font-size: 18px; 
+            background-color: #f8fafc;
+            color: #1e293b;
         }
-
-        .lock-container h2 { color: #fff; margin-bottom: 20px; }
-
-        .pin-input {
-            width: 100%;
-            padding: 14px;
-            text-align: center;
-            font-size: 22px;
-            letter-spacing: 8px;
-            border-radius: 12px;
-            border: none;
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .lock-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #4f46e5, #6366f1);
-            color: white;
-            border: none;
-            border-radius: 12px;
+        #lockScreen button { 
+            padding: 12px 24px; 
+            background: #10b981; 
+            border: none; 
+            color: white; 
+            border-radius: 8px; 
             font-weight: 600;
-            cursor: pointer;
+            cursor: pointer; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        /* মূল কন্টেইনার */
         .container {
             width: 100%;
             max-width: 500px;
             background: #ffffff;
             padding: 25px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05);
-            border-radius: 20px;
-            margin-top: 30px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            margin-top: 25px;
+            box-sizing: border-box;
             border: 1px solid #e2e8f0;
             overflow: hidden;
         }
 
-        /* নতুন প্রিমিয়াম হেডার ডিজাইন */
+        /* আপনার দেওয়া টেক্সট এবং প্রিমিয়াম ব্যাকগ্রাউন্ড কালার */
         h1 {
             text-align: center;
+            color: #ffffff;
             font-size: 24px;
-            font-weight: 800;
+            font-weight: 700;
+            letter-spacing: -0.5px;
             margin: -25px -25px 25px -25px;
-            padding: 30px 20px;
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: #fff;
-            border-bottom: 4px solid #6366f1;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 22px 15px;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-bottom: 3.5px solid #6366f1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        .filter-box { display: flex; flex-direction: column; gap: 16px; }
+        .filter-box {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-        .input-group { display: flex; align-items: center; justify-content: space-between; }
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-        .input-group label { font-weight: 600; width: 90px; color: #475569; font-size: 15px; }
+        .input-group label {
+            font-weight: 600;
+            width: 90px;
+            color: #475569;
+            font-size: 15px;
+        }
 
-        .input-group input {
+        .input-group input, .input-group select {
             flex: 1;
-            padding: 12px 16px;
+            padding: 11px 16px;
             border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
             background-color: #f8fafc;
+            color: #1e293b;
         }
 
-        .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .input-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
 
         .btn {
-            padding: 13px;
+            padding: 12px;
+            font-size: 16px;
             font-weight: 600;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             color: #fff;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .btn-search { background-color: #10b981; }
-        .btn-clear { background-color: #ef4444; }
+        .btn-search {
+            background-color: #10b981;
+        }
+
+        .btn-search:hover {
+            background-color: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-clear {
+            background-color: #ef4444;
+        }
+
+        .btn-clear:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .info-bar {
+            width: 100%;
+            max-width: 500px;
+            background: #eef2f6;
+            color: #334155;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 13px;
+            box-sizing: border-box;
+            border: 1px solid #e2e8f0;
+        }
+
+        #voterList {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            margin-bottom: 60px;
+        }
 
         .voter-card {
             background: #fff;
             border: 2px solid #e11d48;
-            border-radius: 14px;
+            border-radius: 12px;
+            padding: 0px;
             margin-bottom: 20px;
+            box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.05), 0 4px 6px -4px rgba(225, 29, 72, 0.05);
             overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        
+        .voter-card:hover {
+            transform: translateY(-2px);
         }
 
-        .card-header { background: #1e293b; padding: 14px 18px; color: #fff; display: flex; justify-content: space-between; }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e293b;
+            padding: 14px 18px;
+            color: #fff;
+        }
 
-        .gender-tag { background: #be123c; color: #fff; padding: 5px 16px; border-radius: 50px; font-size: 12px; }
+        .card-header h2 {
+            margin: 0;
+            font-size: 15px;
+            color: #fff;
+            flex: 1;
+            font-weight: 600;
+        }
 
+        .voter-id {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 18px;
+        }
+
+        .info-line {
+            display: flex;
+            font-size: 14px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 6px;
+        }
+
+        .info-label {
+            width: 95px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #1e293b;
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .sub-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-size: 13px;
+            border: 1px solid #edf2f7;
+            color: #475569;
+        }
+
+        .gender-tag {
+            background: #be123c;
+            color: #fff;
+            padding: 5px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(190, 18, 60, 0.2);
+        }
+
+        /* Develop Hasibul লেখার নিচে প্রীমিয়াম কালার বার */
         .footer-branding {
             margin-top: auto;
-            padding: 24px;
-            text-align: center;
+            padding: 24px 20px;
+            font-size: 14px;
+            color: #334155;
             font-weight: 700;
-            position: relative;
+            text-align: center;
+            width: 100%;
+            background: #fff;
+            border-top: 1px solid #e2e8f0;
+            box-sizing: border-box;
+            letter-spacing: 0.5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
 
-        .footer-branding::after {
-            content: '';
-            position: absolute;
-            bottom: 12px;
-            left: 44%;
-            width: 12%;
-            height: 4px;
+        .footer-bar {
+            width: 35px;
+            height: 4.5px;
             background: linear-gradient(90deg, #10b981, #6366f1);
             border-radius: 10px;
         }
@@ -159,47 +299,213 @@
 </head>
 <body>
 
-    <div id="secretLockScreen">
-        <div class="lock-container">
-            <h2>সিক্রেট এক্সেস পিন দিন</h2>
-            <input type="password" id="secretPinInput" class="pin-input" maxlength="4" placeholder="••••">
-            <button type="button" onclick="verifySecretPin()" class="lock-btn">আনলক করুন</button>
-        </div>
+    <!-- লক স্ক্রিন ইন্টারফেস -->
+    <div id="lockScreen">
+        <h3 style="margin-bottom: 15px; font-size: 20px; font-weight: 600;">PIN দিন</h3>
+        <input type="password" id="pinInput" placeholder="****" maxlength="4" onkeydown="if(event.key==='Enter') checkPin()">
+        <button onclick="checkPin()">আনলক</button>
     </div>
 
     <div class="container">
-        <h1>Hasibul Voter Search</h1>
+        <h1>Hasibul Make voter search</h1>
+
         <div class="filter-box">
-            <div class="input-group"><label>নাম:</label><input type="text" id="searchName" placeholder="লিখুন..."></div>
-            <div class="input-group"><label>পিতা:</label><input type="text" id="searchFather" placeholder="লিখুন..."></div>
-            <div class="input-group"><label>মাতা:</label><input type="text" id="searchMother" placeholder="লিখুন..."></div>
-            <div class="input-group"><label>গ্রাম:</label><input type="text" id="searchVillage" placeholder="লিখুন..."></div>
-            <div class="input-group"><label>জন্ম তারিখ:</label><input type="text" id="searchDob" placeholder="যেমন: ২০/০৪/২০০৪"></div>
-            <div class="input-group"><label>আইডি:</label><input type="text" id="searchId" placeholder="আইডি নং লিখুন..."></div>
+            <div class="input-group">
+                <label>নাম:</label>
+                <input type="text" id="searchName" placeholder="লিখুন...">
+            </div>
+            <div class="input-group">
+                <label>পিতা:</label>
+                <input type="text" id="searchFather" placeholder="লিখুন...">
+            </div>
+            <div class="input-group">
+                <label>মাতা:</label>
+                <input type="text" id="searchMother" placeholder="লিখুন...">
+            </div>
+            <div class="input-group">
+                <label>গ্রাম:</label>
+                <input type="text" id="searchVillage" placeholder="লিখুন...">
+            </div>
+            <div class="input-group">
+                <label>জন্ম তারিখ:</label>
+                <input type="text" id="searchDob" placeholder="যেমন: ২০/০৪/২০০৪">
+            </div>
+            <div class="input-group">
+                <label>আইডি:</label>
+                <input type="text" id="searchId" placeholder="আইডি নং লিখুন...">
+            </div>
+
             <div class="button-grid">
                 <button type="button" onclick="triggerSearch()" class="btn btn-search">সার্চ</button>
                 <button type="button" onclick="clearFilters()" class="btn btn-clear">ক্লিয়ার</button>
             </div>
         </div>
-        <div id="voterList"></div>
+
+        <div class="info-bar">
+            <span>Search your data, just a second</span>
+            <span>ফলাফল: <span id="totalCount">০</span> জন</span>
+        </div>
+
+        <div id="voterList">
+            <div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#64748b; border:1px solid #e2e8f0; font-weight: 600; font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
+            </div>
+        </div>
     </div>
 
-    <div class="footer-branding">Develop Hasibul</div>
+    <div class="footer-branding">
+        Develop Hasibul
+        <div class="footer-bar"></div>
+    </div>
 
     <script src="male_voters.js"></script>
     <script src="female_voters.js"></script>
+
     <script>
-        function verifySecretPin() {
-            const inputPin = document.getElementById('secretPinInput').value;
-            if (btoa(inputPin) === "OTkwMA==") { // পিন ৯৯০০
-                document.getElementById('secretLockScreen').style.display = 'none';
-            } else { alert("ভুল পিন!"); }
+        window.onload = function() {
+            document.getElementById('totalCount').innerText = "০";
+            document.getElementById('pinInput').focus();
+        };
+
+        // লক পিন কোড চেক ফাংশন
+        function checkPin() {
+            const pin = document.getElementById('pinInput').value;
+            if(pin === "9900") { 
+                document.getElementById('lockScreen').style.display = 'none';
+            } else {
+                alert("ভুল পিন!");
+                document.getElementById('pinInput').value = '';
+                document.getElementById('pinInput').focus();
+            }
         }
 
-        // বাকি সার্চ এবং ডিসপ্লে ফাংশন আগের মতোই থাকবে...
-        function triggerSearch() { /* আগের ফাংশনটি এখানে বসিয়ে দিন */ }
-        function displayVoters(data) { /* আগের ফাংশনটি এখানে বসিয়ে দিন */ }
-        function clearFilters() { /* আগের ফাংশনটি এখানে বসিয়ে দিন */ }
+        function fixZero(str) {
+            return str.replace(/০/g, '0');
+        }
+
+        function enToBnNumber(str) {
+            const en = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+            const bn = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+            return String(str).replace(/[0-9]/g, w => bn[en.indexOf(w)]);
+        }
+
+        function displayVoters(data) {
+            const listContainer = document.getElementById('voterList');
+            const totalCount = document.getElementById('totalCount');
+            
+            listContainer.innerHTML = '';
+            totalCount.innerText = data.length;
+
+            if (!data || data.length === 0) {
+                listContainer.innerHTML = '<div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#94a3b8; border:1px solid #e2e8f0; font-weight:600;">কোনো তথ্য পাওয়া যায়নি!</div>';
+                return;
+            }
+
+            const limitedData = data.slice(0, 50);
+
+            limitedData.forEach((voter) => {
+                const vSerial = voter.serial || voter["ক্রমিক নং"] || '১';
+                const vName = voter.name || voter["নাম"] || '';
+                const vId = voter.voterId || voter["ভোটার নং"] || '';
+                const vFather = voter.fatherName || voter["পিতা"] || '';
+                const vMother = voter.motherName || voter["মাতা"] || voter["مাতা"] || '';
+                const vProfession = voter.profession || voter["পেশা"] || '';
+                const vDob = voter.dob || voter["জন্ম তারিখ"] || '';
+                const vAddress = voter.address || voter["ঠিকানা"] || '';
+
+                const vGender = voter.gender || "পুরুষ";
+
+                let originalSerial = vSerial ? String(vSerial).replace(/^0+/, '') : '';
+                if (!originalSerial) originalSerial = '১';
+                
+                const displayIndex = enToBnNumber(originalSerial).padStart(2, '০'); 
+                
+                const card = `
+                    <div class="voter-card">
+                        <div class="card-header">
+                            <h2>${displayIndex}. নাম: ${vName}</h2>
+                            <span class="voter-id">ID: ${vId}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-line"><span class="info-label">পিতা:</span><span class="info-value">${vFather}</span></div>
+                            <div class="info-line"><span class="info-label">মাতা:</span><span class="info-value">${vMother}</span></div>
+                            <div class="info-line"><span class="info-label">পেশা:</span><span class="info-value">${vProfession}</span></div>
+                            <div class="info-line"><span class="info-label">জন্ম তারিখ:</span><span class="info-value">${vDob}</span></div>
+                            
+                            <div class="sub-grid">
+                                <div><b>ওয়ার্ড নং:</b> ০৬</div>
+                                <div><b>পোস্টকোড:</b> ৬৬০০</div>
+                                <div style="grid-column: span 2;"><b>ডাকঘর:</b> চাড়াডাঙ্গা</div>
+                            </div>
+                            
+                            <div style="font-size:13px; margin-top:10px; padding:10px; background:#f8fafc; border-radius:6px; border:1px solid #edf2f7; color: #475569; line-height: 1.4;">
+                                <b>ঠিকানা:</b> ${vAddress}
+                            </div>
+                            
+                            <div style="display:flex; justify-content:flex-end; margin-top:12px; font-size:12px;">
+                                <span class="gender-tag">${vGender}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listContainer.innerHTML += card;
+            });
+
+            if(data.length > 50) {
+                listContainer.innerHTML += `<div style="text-align:center; padding:15px; color:#64748b; font-size:13px; font-weight:500;">আরও ${(data.length - 50)} টি রেজাল্ট ফিল্টার করা হয়েছে। নির্দিষ্ট করতে আরও লিখুন...</div>`;
+            }
+        }
+
+        function triggerSearch() {
+            const nameQuery = document.getElementById('searchName').value.toLowerCase().trim();
+            const fatherQuery = document.getElementById('searchFather').value.toLowerCase().trim();
+            const motherQuery = document.getElementById('searchMother').value.toLowerCase().trim();
+            const villageQuery = document.getElementById('searchVillage').value.toLowerCase().trim();
+            const dobQuery = fixZero(document.getElementById('searchDob').value.trim());
+            const idQuery = fixZero(document.getElementById('searchId').value.trim());
+
+            if(!nameQuery && !fatherQuery && !motherQuery && !villageQuery && !dobQuery && !idQuery) {
+                alert("অনুগ্রহ করে যেকোনো একটি বক্সে কিছু লিখুন!");
+                return;
+            }
+
+            const maleData = (typeof voterListMale !== 'undefined' ? voterListMale : []).map(v => ({...v, gender: "পুরুষ"}));
+            const femaleData = (typeof femaleVoters !== 'undefined' ? femaleVoters : []).map(v => ({...v, gender: "মহিলা"}));
+            
+            const targetData = [...maleData, ...femaleData];
+
+            const filtered = targetData.filter(voter => {
+                const vName = (voter.name || voter["নাম"] || '').toLowerCase();
+                const vFather = (voter.fatherName || voter["পিতা"] || '').toLowerCase();
+                const vMother = (voter.motherName || voter["মাতা"] || voter["مাতা"] || '').toLowerCase();
+                const vAddress = (voter.address || voter["ঠিকানা"] || '').toLowerCase();
+                const vDob = fixZero(voter.dob || voter["জন্ম তারিখ"] || '');
+                const vId = fixZero(voter.voterId || voter["ভোটার নং"] || '');
+                const vSerial = fixZero(String(voter.serial || voter["ক্রমিক নং"] || ''));
+
+                const matchName = !nameQuery || vName.includes(nameQuery);
+                const matchFather = !fatherQuery || vFather.includes(fatherQuery);
+                const matchMother = !motherQuery || vMother.includes(motherQuery);
+                const matchVillage = !villageQuery || vAddress.includes(villageQuery);
+                const matchDob = !dobQuery || vDob.includes(dobQuery);
+                const matchId = !idQuery || vId.includes(idQuery) || vSerial.includes(idQuery);
+
+                return matchName && matchFather && matchMother && matchVillage && matchDob && matchId;
+            });
+
+            displayVoters(filtered);
+        }
+
+        function clearFilters() {
+            document.getElementById('searchName').value = '';
+            document.getElementById('searchFather').value = '';
+            document.getElementById('searchMother').value = '';
+            document.getElementById('searchVillage').value = '';
+            document.getElementById('searchDob').value = '';
+            document.getElementById('searchId').value = '';
+            document.getElementById('voterList').innerHTML = '<div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#64748b; border:1px solid #e2e8f0; font-weight: 600; font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।</div>';
+            document.getElementById('totalCount').innerText = "০";
+        }
     </script>
 </body>
 </html>
