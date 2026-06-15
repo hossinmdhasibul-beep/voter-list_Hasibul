@@ -457,7 +457,7 @@
             const limitedData = data.slice(0, 50);
 
             limitedData.forEach((voter) => {
-                const vSerial = voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : voter.serial;
+                const vSerial = voter["क्रमिक नং"] !== undefined ? voter["क्रमিক नং"] : voter.serial;
                 const vName = voter["নাম"] !== undefined ? voter["নাম"] : voter.name;
                 const vId = voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : voter.voterId;
                 const vFather = voter["পিতা"] !== undefined ? voter["পিতা"] : voter.fatherName;
@@ -528,13 +528,13 @@
             const targetData = [...maleData, ...femaleData];
 
             const filtered = targetData.filter(voter => {
-                const vName = (voter["নাম"] !== undefined ? voter["নাম"] : voter.name || '').trim();
-                const vFather = (voter["পিতা"] !== undefined ? voter["পিতা"] : voter.fatherName || '').trim();
-                const vMother = (voter["মাতা"] !== undefined ? voter["মাতা"] : voter.motherName || '').trim();
-                const vAddress = (voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : voter.address || '').trim();
-                const vDob = (voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : voter.dob || '').trim();
-                const vId = (voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : voter.voterId || '').trim();
-                const vSerial = String(voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : voter.serial || '').trim();
+                const vName = String(voter["নাম"] !== undefined ? voter["নাম"] : (voter.name || '')).trim();
+                const vFather = String(voter["পিতা"] !== undefined ? voter["পিতা"] : (voter.fatherName || '')).trim();
+                const vMother = String(voter["মাতা"] !== undefined ? voter["মাতা"] : (voter.motherName || '')).trim();
+                const vAddress = String(voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : (voter.address || '')).trim();
+                const vDob = String(voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : (voter.dob || '')).trim();
+                const vId = String(voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : (voter.voterId || '')).trim();
+                const vSerial = String(voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : (voter.serial || '')).trim();
 
                 const matchName = !nameQuery || vName.includes(nameQuery);
                 const matchFather = !fatherQuery || vFather.includes(fatherQuery);
