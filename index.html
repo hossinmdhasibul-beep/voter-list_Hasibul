@@ -17,90 +17,6 @@
             color: #334155;
         }
 
-        /* লক স্ক্রিন ডিজাইন */
-        #lockScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0f172a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .lock-container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 360px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-        }
-
-        .lock-container h2 {
-            margin: 0 0 20px 0;
-            color: #0f172a;
-            font-size: 20px;
-        }
-
-        .pin-input {
-            width: 80%;
-            padding: 12px;
-            font-size: 22px;
-            letter-spacing: 8px;
-            text-align: center;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            outline: none;
-            transition: all 0.2s;
-            background: #f8fafc;
-        }
-
-        .pin-input:focus {
-            border-color: #e11d48;
-            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.1);
-        }
-
-        .btn-unlock {
-            width: 80%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            background-color: #e11d48;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-unlock:hover {
-            background-color: #be123c;
-        }
-
-        .admin-note {
-            margin-top: 20px;
-            font-size: 13px;
-            color: #64748b;
-            font-weight: 500;
-            line-height: 1.4;
-        }
-
-        /* মেইন কন্টেন্ট (লক থাকা অবস্থায় হাইড থাকবে) */
-        #mainContent {
-            display: none;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
         .container {
             width: 100%;
             max-width: 500px;
@@ -113,20 +29,13 @@
             border: 1px solid #e2e8f0;
         }
 
-        /* হেডিং এর ব্যাকগ্রাউন্ড স্টাইল */
         h1 {
             text-align: center;
-            color: #ffffff;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-size: 22px;
+            color: #0f172a;
+            font-size: 24px;
             font-weight: 700;
-            margin-top: 0;
             margin-bottom: 25px;
             letter-spacing: -0.5px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #e11d48;
         }
 
         .filter-box {
@@ -227,6 +136,7 @@
             margin-bottom: 60px;
         }
 
+        /* প্রিমিয়াম রুবি-রেড ডিজাইনের মডার্ন বর্ডার ও শ্যাডো */
         .voter-card {
             background: #fff;
             border: 2px solid #e11d48;
@@ -309,6 +219,7 @@
             color: #475569;
         }
 
+        /* প্রিমিয়াম জেন্ডার ট্যাগ */
         .gender-tag {
             background: #be123c;
             color: #fff;
@@ -336,100 +247,66 @@
 </head>
 <body>
 
-    <!-- লক স্ক্রিন সেকশন -->
-    <div id="lockScreen">
-        <div class="lock-container">
-            <h2>সিকিউরিটি পিন লিখুন</h2>
-            <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" onkeydown="if(event.key==='Enter') verifyPin()">
-            <br>
-            <button class="btn-unlock" onclick="verifyPin()">আনলক করুন</button>
-            <div class="admin-note">
-                পাসওয়ার্ড এর জন্য এডমিনের সাথে যোগাযোগ করুন।
+    <div class="container">
+        <h1>Hasibul Make voter search</h1>
+
+        <div class="filter-box">
+            <div class="input-group">
+                <label>নাম:</label>
+                <input type="text" id="searchName" placeholder="লিখুন...">
+            </div>
+            <div class="input-group">
+                <label>পিতা:</label>
+                <input type="text" id="searchFather" placeholder="লিখুন...">
+            </div>
+            <div class="input-group">
+                <label>মাতা:</label>
+                <input type="text" id="searchMother" placeholder="লিখুন...">
+            </div>
+            <div class="input-group">
+                <label>গ্রাম:</label>
+                <input type="text" id="searchVillage" placeholder="লিখুন...">
+            </div>
+            <div class="input-group">
+                <label>জন্ম তারিখ:</label>
+                <input type="text" id="searchDob" placeholder="যেমন: ২০/০৪/২০০৪">
+            </div>
+            <div class="input-group">
+                <label>আইডি:</label>
+                <input type="text" id="searchId" placeholder="আইডি নং লিখুন...">
+            </div>
+
+            <div class="button-grid">
+                <button type="button" onclick="triggerSearch()" class="btn btn-search">সার্চ</button>
+                <button type="button" onclick="clearFilters()" class="btn btn-clear">ক্লিয়ার</button>
+            </div>
+        </div>
+
+        <div class="info-bar">
+            <span>Search your data, just a second</span>
+            <span>ফলাফল: <span id="totalCount">০</span> জন</span>
+        </div>
+
+        <div id="voterList">
+            <div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#64748b; border:1px solid #e2e8f0; font-weight: 600; font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
             </div>
         </div>
     </div>
 
-    <!-- মেইন অ্যাপ কন্টেন্ট -->
-    <div id="mainContent">
-        <div class="container">
-            <h1>Hasibul Make voter search</h1>
-
-            <div class="filter-box">
-                <div class="input-group">
-                    <label>নাম:</label>
-                    <input type="text" id="searchName" placeholder="লিখুন...">
-                </div>
-                <div class="input-group">
-                    <label>পিতা:</label>
-                    <input type="text" id="searchFather" placeholder="লিখুন...">
-                </div>
-                <div class="input-group">
-                    <label>মাতা:</label>
-                    <input type="text" id="searchMother" placeholder="লিখুন...">
-                </div>
-                <div class="input-group">
-                    <label>গ্রাম:</label>
-                    <input type="text" id="searchVillage" placeholder="লিখুন...">
-                </div>
-                <div class="input-group">
-                    <label>জন্ম তারিখ:</label>
-                    <input type="text" id="searchDob" placeholder="যেমন: ২০/০৪/২০০৪">
-                </div>
-                <div class="input-group">
-                    <label>আইডি:</label>
-                    <input type="text" id="searchId" placeholder="আইডি নং লিখুন...">
-                </div>
-
-                <div class="button-grid">
-                    <button type="button" onclick="triggerSearch()" class="btn btn-search">সার্চ</button>
-                    <button type="button" onclick="clearFilters()" class="btn btn-clear">ক্লিয়ার</button>
-                </div>
-            </div>
-
-            <div class="info-bar">
-                <span>Search your data, just a second</span>
-                <span>ফলাফল: <span id="totalCount">০</span> জন</span>
-            </div>
-
-            <div id="voterList">
-                <div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#64748b; border:1px solid #e2e8f0; font-weight: 600; font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
-                    উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-branding">
-            Develop Hasibul
-        </div>
+    <div class="footer-branding">
+        Develop Hasibul
     </div>
 
     <script src="male_voters.js"></script>
     <script src="female_voters.js"></script>
 
     <script>
-        const CORRECT_PIN = "3366"; 
-
-        function verifyPin() {
-            const userInput = document.getElementById('pinInput').value;
-            if (userInput === CORRECT_PIN) {
-                document.getElementById('lockScreen').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'flex';
-                document.body.scrollIntoView();
-                document.getElementById('pinInput').blur();
-            } else {
-                alert("ভুল পিন কোড! আবার চেষ্টা করুন।");
-                document.getElementById('pinInput').value = '';
-                document.getElementById('pinInput').focus();
-            }
-        }
-
         window.onload = function() {
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('lockScreen').style.display = 'flex';
-            document.getElementById('pinInput').focus();
             document.getElementById('totalCount').innerText = "০";
         };
 
+        // সমস্ত বাংলা সংখ্যাকে ইংরেজিতে কনভার্ট করার স্ট্যান্ডার্ড ফাংশন (যাতে সব আইডি ও ডেট সঠিকভাবে ম্যাচ করে)
         function fixZero(str) {
             if (!str) return '';
             const bn = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
@@ -441,14 +318,14 @@
             return result;
         }
 
-        // আংশিক মিল এবং স্পেশাল ক্যারেক্টার হ্যান্ডেল করার জন্য ইউনিফর্ম টেক্সট ফাংশন
+        // আংশিক মিল (Partial Search) এবং স্পেশাল বিসর্গ ক্যারেক্টার ইগনোর করার ক্লিন ফাংশন
         function cleanText(str) {
             if (!str) return '';
             return String(str)
-                .replace(/ঃ/g, '')  
-                .replace(/ং/g, '')  
-                .replace(/[\u200B-\u200D\uFEFF]/g, '') 
-                .replace(/\s+/g, '') 
+                .replace(/ঃ/g, '')  // বিসর্গ রিমুভ
+                .replace(/ং/g, '')  // অনুস্বার রিমুভ
+                .replace(/[\u200B-\u200D\uFEFF]/g, '') // অদৃশ্য ক্যারেক্টার ক্লিন
+                .replace(/\s+/g, '') // সব স্পেস রিমুভ
                 .toLowerCase()       
                 .trim();
         }
@@ -475,19 +352,34 @@
             const limitedData = data.slice(0, 50);
 
             limitedData.forEach((voter) => {
-                const displayIndex = enToBnNumber(voter.cleanSerial).padStart(2, '০'); 
+                // ছেলে-মেয়ে ডাটার অবজেক্ট প্রোপার্টি সঠিকভাবে রিড করার রিফাইনড ম্যাপিং
+                const vSerial = voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : (voter.serial !== undefined ? voter.serial : '১');
+                const vName = voter["নাম"] !== undefined ? voter["নাম"] : (voter.name !== undefined ? voter.name : '');
+                const vId = voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : (voter.voterId !== undefined ? voter.voterId : '');
+                const vFather = voter["পিতা"] !== undefined ? voter["পিতা"] : (voter.fatherName !== undefined ? voter.fatherName : '');
+                const vMother = voter["مাতা"] !== undefined ? voter["مাতা"] : (voter["মাতা"] !== undefined ? voter["মাতা"] : (voter.motherName !== undefined ? voter.motherName : ''));
+                const vProfession = voter["পেশা"] !== undefined ? voter["পেশা"] : (voter.profession !== undefined ? voter.profession : '');
+                const vDob = voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : (voter.dob !== undefined ? voter.dob : '');
+                const vAddress = voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : (voter.address !== undefined ? voter.address : '');
+
+                const vGender = voter.gender || "পুরুষ";
+
+                let originalSerial = vSerial ? String(vSerial).replace(/^0+/, '') : '';
+                if (!originalSerial) originalSerial = '১';
+                
+                const displayIndex = enToBnNumber(originalSerial).padStart(2, '০'); 
                 
                 const card = `
                     <div class="voter-card">
                         <div class="card-header">
-                            <h2>${displayIndex}. নাম: ${voter.rawName || ''}</h2>
-                            <span class="voter-id">ID: ${voter.rawId || ''}</span>
+                            <h2>${displayIndex}. নাম: ${vName}</h2>
+                            <span class="voter-id">ID: ${vId}</span>
                         </div>
                         <div class="card-body">
-                            <div class="info-line"><span class="info-label">পিতা:</span><span class="info-value">${voter.rawFather || ''}</span></div>
-                            <div class="info-line"><span class="info-label">মাতা:</span><span class="info-value">${voter.rawMother || ''}</span></div>
-                            <div class="info-line"><span class="info-label">পেশা:</span><span class="info-value">${voter.rawProfession || ''}</span></div>
-                            <div class="info-line"><span class="info-label">জন্ম তারিখ:</span><span class="info-value">${voter.rawDob || ''}</span></div>
+                            <div class="info-line"><span class="info-label">পিতা:</span><span class="info-value">${vFather}</span></div>
+                            <div class="info-line"><span class="info-label">মাতা:</span><span class="info-value">${vMother}</span></div>
+                            <div class="info-line"><span class="info-label">পেশা:</span><span class="info-value">${vProfession}</span></div>
+                            <div class="info-line"><span class="info-label">জন্ম তারিখ:</span><span class="info-value">${vDob}</span></div>
                             
                             <div class="sub-grid">
                                 <div><b>ওয়ার্ড নং:</b> ০৬</div>
@@ -496,11 +388,11 @@
                             </div>
                             
                             <div style="font-size:13px; margin-top:10px; padding:10px; background:#f8fafc; border-radius:6px; border:1px solid #edf2f7; color: #475569; line-height: 1.4;">
-                                <b>ঠিকানা:</b> ${voter.rawAddress || ''}
+                                <b>ঠিকানা:</b> ${vAddress}
                             </div>
                             
                             <div style="display:flex; justify-content:flex-end; margin-top:12px; font-size:12px;">
-                                <span class="gender-tag">${voter.gender}</span>
+                                <span class="gender-tag">${vGender}</span>
                             </div>
                         </div>
                     </div>
@@ -526,58 +418,41 @@
                 return;
             }
 
-            const maleRaw = (typeof voterListMale !== 'undefined' ? voterListMale : []);
-            const femaleRaw = (typeof femaleVoters !== 'undefined' ? femaleVoters : []);
+            const maleData = (typeof voterListMale !== 'undefined' ? voterListMale : []).map(v => ({...v, gender: "পুরুষ"}));
+            const femaleData = (typeof femaleVoters !== 'undefined' ? femaleVoters : []).map(v => ({...v, gender: "মহিলা"}));
             
-            // সর্বজনীন বা কমন ডাটাবেজ তৈরি (ছেলে ও মেয়ে ডাটার সব ফিল্ডকে একই কাঠামোতে আনা)
-            const masterList = [];
+            const targetData = [...maleData, ...femaleData];
 
-            maleRaw.forEach(voter => {
-                const ser = String(voter["ক্রমিক নং"] || '').trim().replace(/^0+/, '');
-                masterList.push({
-                    rawName: String(voter["নাম"] || '').trim(),
-                    rawFather: String(voter["পিতা"] || '').trim(),
-                    rawMother: String(voter["মাতা"] || '').trim(),
-                    rawAddress: String(voter["ঠিকানা"] || '').trim(),
-                    rawDob: String(voter["জন্ম তারিখ"] || '').trim(),
-                    rawId: String(voter["ভোটার নং"] || '').trim(),
-                    rawProfession: String(voter["পেশা"] || '').trim(),
-                    cleanSerial: ser || '১',
-                    gender: "পুরুষ"
-                });
-            });
-
-            femaleRaw.forEach(voter => {
-                const ser = String(voter.serial || voter["ক্রমিক নং"] || '').trim().replace(/^0+/, '');
-                masterList.push({
-                    rawName: String(voter.name || voter["নাম"] || '').trim(),
-                    rawFather: String(voter.fatherName || voter["পিতা"] || '').trim(),
-                    rawMother: String(voter.motherName || voter["মাতা"] || '').trim(),
-                    rawAddress: String(voter.address || voter["ঠিকানা"] || '').trim(),
-                    rawDob: String(voter.dob || voter["জন্ম তারিখ"] || '').trim(),
-                    rawId: String(voter.voterId || voter["ভোটার নং"] || '').trim(),
-                    rawProfession: String(voter.profession || voter["পেশা"] || '').trim(),
-                    cleanSerial: ser || '১',
-                    gender: "মহিলা"
-                });
-            });
-
-            // নিখুঁত আংশিক মিল (Partial Sequence Filter) লজিক
-            const filtered = masterList.filter(voter => {
-                if(nameQuery && !cleanText(voter.rawName).includes(cleanText(nameQuery))) return false;
-                if(fatherQuery && !cleanText(voter.rawFather).includes(cleanText(fatherQuery))) return false;
-                if(motherQuery && !cleanText(voter.rawMother).includes(cleanText(motherQuery))) return false;
-                if(villageQuery && !cleanText(voter.rawAddress).includes(cleanText(villageQuery))) return false;
-                if(dobQuery && !cleanText(voter.rawDob).includes(cleanText(dobQuery))) return false;
+            const filtered = targetData.filter(voter => {
+                // অবজেক্টের কী-গুলোর কেস সেন্সিটিভিটি (যেমন: fatherName, motherName) ফিক্সড রিডিং লজিক
+                const vName = String(voter["নাম"] !== undefined ? voter["নাম"] : (voter.name !== undefined ? voter.name : ''));
+                const vFather = String(voter["পিতা"] !== undefined ? voter["পিতা"] : (voter.fatherName !== undefined ? voter.fatherName : ''));
+                const vMother = String(voter["مাতা"] !== undefined ? voter["مাতা"] : (voter["মাতা"] !== undefined ? voter["মাতা"] : (voter.motherName !== undefined ? voter.motherName : '')));
+                const vAddress = String(voter["ঠিকানা"] !== undefined ? voter["ঠিকানা"] : (voter.address !== undefined ? voter.address : ''));
                 
-                if(idQuery) {
-                    const normalizedIdQuery = fixZero(idQuery);
-                    const normalizedVId = fixZero(voter.rawId);
-                    const normalizedVSerial = fixZero(voter.cleanSerial);
-                    if(!voter.rawId.includes(idQuery) && !voter.cleanSerial.includes(idQuery) && !normalizedVId.includes(normalizedIdQuery) && !normalizedVSerial.includes(normalizedIdQuery)) return false;
-                }
+                const vDob = String(voter["জন্ম তারিখ"] !== undefined ? voter["জন্ম তারিখ"] : (voter.dob !== undefined ? voter.dob : ''));
+                const vId = String(voter["ভোটার নং"] !== undefined ? voter["ভোটার নং"] : (voter.voterId !== undefined ? voter.voterId : ''));
+                const vSerial = String(voter["ক্রমিক নং"] !== undefined ? voter["ক্রমিক নং"] : (voter.serial !== undefined ? voter.serial : ''));
 
-                return true;
+                // অল্প নাম লিখলেও আংশিক সিকোয়েন্স ম্যাচ করার জন্য উন্নত কন্ডিশন
+                const matchName = !nameQuery || cleanText(vName).includes(cleanText(nameQuery));
+                const matchFather = !fatherQuery || cleanText(vFather).includes(cleanText(fatherQuery));
+                const matchMother = !motherQuery || cleanText(vMother).includes(cleanText(motherQuery));
+                const matchVillage = !villageQuery || cleanText(vAddress).includes(cleanText(villageQuery));
+                const matchDob = !dobQuery || cleanText(fixZero(vDob)).includes(cleanText(fixZero(dobQuery)));
+                
+                // আইডি এবং ক্রমিক সংখ্যা বাংলা/ইংরেজি নির্বিশেষে মিলানোর লজিক
+                const normalizedIdQuery = fixZero(idQuery);
+                const normalizedVId = fixZero(vId);
+                const normalizedVSerial = fixZero(vSerial);
+
+                const matchId = !idQuery || 
+                                vId.includes(idQuery) || 
+                                vSerial.includes(idQuery) || 
+                                normalizedVId.includes(normalizedIdQuery) || 
+                                normalizedVSerial.includes(normalizedIdQuery);
+
+                return matchName && matchFather && matchMother && matchVillage && matchDob && matchId;
             });
 
             displayVoters(filtered);
