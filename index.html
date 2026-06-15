@@ -33,9 +33,9 @@
 
         .lock-container {
             background: #ffffff;
-            padding: 25px;
+            padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
             width: 90%;
             max-width: 360px;
             text-align: center;
@@ -50,14 +50,21 @@
 
         .pin-input {
             width: 80%;
-            padding: 11px 16px;
-            font-size: 20px;
+            padding: 12px;
+            font-size: 22px;
+            letter-spacing: 8px;
             text-align: center;
-            border: 1.5px solid #cbd5e1;
+            border: 2px solid #cbd5e1;
             border-radius: 8px;
             margin-bottom: 15px;
             outline: none;
-            background-color: #f8fafc;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+
+        .pin-input:focus {
+            border-color: #e11d48;
+            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.1);
         }
 
         .btn-unlock {
@@ -65,24 +72,31 @@
             padding: 12px;
             font-size: 16px;
             font-weight: 600;
-            background-color: #10b981;
+            background-color: #e11d48;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-unlock:hover {
+            background-color: #be123c;
         }
 
         .admin-note {
             margin-top: 20px;
             font-size: 13px;
             color: #64748b;
-            font-weight: 600;
+            font-weight: 500;
+            line-height: 1.4;
         }
 
-        /* মেইন অ্যাপ কন্টেন্ট (লক থাকা অবস্থায় হাইড থাকবে) */
+        /* মেইন কন্টেন্ট (লক থাকা অবস্থায় হাইড থাকবে) */
         #mainContent {
             display: none;
             width: 100%;
+            display: flex;
             flex-direction: column;
             align-items: center;
         }
@@ -99,6 +113,7 @@
             border: 1px solid #e2e8f0;
         }
 
+        /* হেডিং এর ব্যাকগ্রাউন্ড স্টাইল */
         h1 {
             text-align: center;
             color: #ffffff;
@@ -393,11 +408,14 @@
 
     <script>
         // লক স্ক্রিন ভেরিফিকেশন ফাংশন
+        const CORRECT_PIN = "3366"; // এখানে আপনার পছন্দের ৪ ডিজিটের পিন কোড সেট করুন
+
         function verifyPin() {
-            const userInput = document.getElementById('pinInput').value.trim();
-            if (userInput === "3366") {
+            const userInput = document.getElementById('pinInput').value;
+            if (userInput === CORRECT_PIN) {
                 document.getElementById('lockScreen').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'flex';
+                // ফোকাস ক্লিয়ার করা যাতে কিবোর্ড নেমে যায়
                 document.getElementById('pinInput').blur();
             } else {
                 alert("ভুল পিন কোড! আবার চেষ্টা করুন।");
@@ -407,6 +425,7 @@
         }
 
         window.onload = function() {
+            // লোড হওয়ার সাথে সাথে কন্টেন্ট হাইড এবং লক স্ক্রিন ডিসপ্লে নিশ্চিত করা
             document.getElementById('mainContent').style.display = 'none';
             document.getElementById('lockScreen').style.display = 'flex';
             document.getElementById('pinInput').focus();
@@ -533,11 +552,4 @@
         function clearFilters() {
             document.getElementById('searchName').value = '';
             document.getElementById('searchFather').value = '';
-            document.getElementById('searchMother').value = '';
-            document.getElementById('searchVillage').value = '';
-            document.getElementById('searchDob').value = '';
-            document.getElementById('searchId').value = '';
-            document.getElementById('voterList').innerHTML = '<div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#64748b; border:1px solid #e2e8f0; font-weight: 600; font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।</div>';
-            document.getElementById('totalCount').innerText = "০";
-        }
-    </scrip
+            document.getElem
