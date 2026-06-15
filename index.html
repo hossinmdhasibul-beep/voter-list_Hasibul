@@ -2,9 +2,11 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- মোবাইল অ্যাপের মতো ফিক্সড রাখার জন্য ভিউপোর্ট সেটিংস -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hasibul Make voter search</title>
     <style>
+        /* পুরো বডিকে ফিক্সড রাখার জন্য */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #f1f5f9;
@@ -14,143 +16,75 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            color: #334155;
+            overflow-x: hidden; /* ডানে-বামে নড়াচড়া বন্ধ করতে */
+            touch-action: manipulation; /* জুম প্রিভেন্ট করতে */
         }
 
-        /* লক সিস্টেম ডিজাইন */
+        /* লক স্ক্রিন */
         #lockScreen { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: #1e293b; 
-            z-index: 9999; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            color: white; 
-            padding: 20px;
-            text-align: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1e293b; 
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; color: white; padding: 20px; text-align: center; 
         }
-        #lockScreen input { 
-            padding: 12px; 
-            border-radius: 8px; 
-            border: 1px solid #cbd5e1; 
-            margin-bottom: 12px; 
-            text-align: center; 
-            font-size: 18px; 
-            background-color: #f8fafc;
-            color: #1e293b;
-            width: 200px;
-        }
-        #lockScreen button { 
-            padding: 12px 24px; 
-            background: #10b981; 
-            border: none; 
-            color: white; 
-            border-radius: 8px; 
-            font-weight: 600;
-            cursor: pointer; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        /* নতুন লেখাটির ডিজাইন */
-        .admin-note {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #94a3b8;
-        }
+        #lockScreen input { padding: 12px; border-radius: 8px; border: none; margin-bottom: 12px; text-align: center; font-size: 18px; width: 200px; }
+        #lockScreen button { padding: 12px 24px; background: #10b981; border: none; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
         .container {
             width: 100%;
             max-width: 500px;
             background: #ffffff;
-            padding: 25px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            border-radius: 16px;
-            margin-top: 25px;
+            padding: 20px;
             box-sizing: border-box;
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
+            margin-top: 10px;
+            border-radius: 0; /* অ্যাপের মতো করতে কর্নার শার্প রাখা যায় */
+            min-height: 90vh;
         }
 
         h1 {
-            text-align: center;
-            color: #ffffff;
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin: -25px -25px 25px -25px;
-            padding: 22px 15px;
+            text-align: center; color: #ffffff; font-size: 20px; font-weight: 700;
+            margin: -20px -20px 20px -20px; padding: 20px;
             background: linear-gradient(135deg, #1e293b, #334155);
-            border-bottom: 3.5px solid #6366f1;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-bottom: 4px solid #6366f1;
         }
 
-        .filter-box { display: flex; flex-direction: column; gap: 16px; }
+        .filter-box { display: flex; flex-direction: column; gap: 12px; }
         .input-group { display: flex; align-items: center; justify-content: space-between; }
-        .input-group label { font-weight: 600; width: 90px; color: #475569; font-size: 15px; }
-        .input-group input { flex: 1; padding: 11px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 15px; background-color: #f8fafc; color: #1e293b; }
-        
-        .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
-        .btn { padding: 12px; font-size: 16px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; color: #fff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .input-group label { width: 80px; font-weight: 600; font-size: 14px; }
+        .input-group input { flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; }
+
+        .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .btn { padding: 10px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; color: #fff; }
         .btn-search { background-color: #10b981; }
         .btn-clear { background-color: #ef4444; }
 
-        .info-bar { width: 100%; max-width: 500px; background: #eef2f6; padding: 12px 16px; border-radius: 8px; margin-top: 20px; display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; border: 1px solid #e2e8f0; }
-
-        #voterList { width: 100%; max-width: 500px; margin-top: 20px; margin-bottom: 60px; }
-        .voter-card { background: #fff; border: 2px solid #e11d48; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.05); overflow: hidden; }
-        
-        .card-header { display: flex; justify-content: space-between; background: #1e293b; padding: 14px 18px; color: #fff; }
-        .card-body { padding: 18px; }
-        .info-line { display: flex; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
-        .info-label { width: 95px; color: #64748b; font-weight: 500; }
-        .info-value { color: #1e293b; font-weight: 600; }
-        .gender-tag { background: #be123c; color: #fff; padding: 5px 16px; border-radius: 50px; font-size: 12px; font-weight: 600; }
-
-        .footer-branding { margin-top: auto; padding: 24px 20px; font-size: 14px; color: #334155; font-weight: 700; text-align: center; width: 100%; background: #fff; border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .footer-bar { width: 35px; height: 4.5px; background: linear-gradient(90deg, #10b981, #6366f1); border-radius: 10px; }
+        .footer-branding { padding: 20px; font-size: 14px; color: #334155; font-weight: 700; text-align: center; }
+        .footer-bar { width: 40px; height: 4px; background: linear-gradient(90deg, #10b981, #6366f1); margin: 5px auto; border-radius: 2px; }
     </style>
 </head>
 <body>
 
-    <!-- লক স্ক্রিন ইন্টারফেস -->
     <div id="lockScreen">
-        <h3 style="margin-bottom: 15px; font-size: 20px; font-weight: 600;">PIN দিন</h3>
-        <input type="password" id="pinInput" placeholder="****" maxlength="4" onkeydown="if(event.key==='Enter') checkPin()">
+        <h3>PIN দিন</h3>
+        <input type="password" id="pinInput" maxlength="4" placeholder="****">
         <button onclick="checkPin()">আনলক</button>
-        <div class="admin-note">পাসওয়ার্ড এর জন্য এডমিন এর সাথে যোগাযোগ করুন</div>
+        <p style="color: #94a3b8; font-size: 12px; margin-top: 15px;">পাসওয়ার্ড এর জন্য এডমিন এর সাথে যোগাযোগ করুন</p>
     </div>
 
     <div class="container">
         <h1>Hasibul Make voter search</h1>
-
         <div class="filter-box">
-            <div class="input-group"><label>নাম:</label><input type="text" id="searchName" placeholder="লিখুন..."></div>
-            <div class="input-group"><label>পিতা:</label><input type="text" id="searchFather" placeholder="লিখুন..."></div>
-            <div class="input-group"><label>মাতা:</label><input type="text" id="searchMother" placeholder="লিখুন..."></div>
-            <div class="input-group"><label>গ্রাম:</label><input type="text" id="searchVillage" placeholder="লিখুন..."></div>
-            <div class="input-group"><label>জন্ম:</label><input type="text" id="searchDob" placeholder="২০/০৪/২০০৪"></div>
-            <div class="input-group"><label>আইডি:</label><input type="text" id="searchId" placeholder="আইডি নং লিখুন..."></div>
-
+            <div class="input-group"><label>নাম:</label><input type="text" id="searchName" placeholder="..."></div>
+            <div class="input-group"><label>পিতা:</label><input type="text" id="searchFather" placeholder="..."></div>
+            <div class="input-group"><label>মাতা:</label><input type="text" id="searchMother" placeholder="..."></div>
+            <div class="input-group"><label>গ্রাম:</label><input type="text" id="searchVillage" placeholder="..."></div>
+            <div class="input-group"><label>জন্ম:</label><input type="text" id="searchDob" placeholder="..."></div>
+            <div class="input-group"><label>আইডি:</label><input type="text" id="searchId" placeholder="..."></div>
             <div class="button-grid">
-                <button type="button" onclick="triggerSearch()" class="btn btn-search">সার্চ</button>
-                <button type="button" onclick="clearFilters()" class="btn btn-clear">ক্লিয়ার</button>
+                <button class="btn btn-search" onclick="triggerSearch()">সার্চ</button>
+                <button class="btn btn-clear" onclick="clearFilters()">ক্লিয়ার</button>
             </div>
         </div>
-
-        <div class="info-bar">
-            <span>Search your data, just a second</span>
-            <span>ফলাফল: <span id="totalCount">০</span> জন</span>
-        </div>
-
-        <div id="voterList">
-            <div style="text-align:center; padding:35px; background:white; border-radius:12px; color:#64748b; border:1px solid #e2e8f0; font-weight: 600; font-size: 15px;">
-                উপরে তথ্য লিখে "সার্চ" বাটনে ক্লিক করুন।
-            </div>
-        </div>
+        <div id="voterList"></div>
     </div>
 
     <div class="footer-branding">
@@ -161,15 +95,12 @@
     <script src="male_voters.js"></script>
     <script src="female_voters.js"></script>
     <script>
-        window.onload = function() { document.getElementById('totalCount').innerText = "০"; document.getElementById('pinInput').focus(); };
         function checkPin() {
-            if(document.getElementById('pinInput').value === "9900") { document.getElementById('lockScreen').style.display = 'none'; }
-            else { alert("ভুল পিন!"); document.getElementById('pinInput').value = ''; }
+            if(document.getElementById('pinInput').value === "9900") {
+                document.getElementById('lockScreen').style.display = 'none';
+            } else { alert("ভুল পিন!"); }
         }
-        // সার্চ এবং ডিসপ্লে ফাংশনগুলো আগের মতোই থাকবে
-        function triggerSearch() { /* সার্চ লজিক */ }
-        function displayVoters(data) { /* ডিসপ্লে লজিক */ }
-        function clearFilters() { /* ক্লিয়ার লজিক */ }
+        // আপনার সার্চ লজিক এখানে যুক্ত করুন
     </script>
 </body>
 </html>
