@@ -17,14 +17,14 @@
             color: #334155;
         }
 
-        /* লক স্ক্রিন বা লগইন ইন্টারফেস স্টাইল */
+        /* --- ইন্টারেক্টিভ পান্ডা লগইন ইন্টারফেস স্টাইল --- */
         #loginScreen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #0f172a;
+            background-color: #0d1b2a; /* ডার্ক ব্যাকগ্রাউন্ড */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,71 +33,192 @@
             box-sizing: border-box;
         }
 
-        .login-box {
-            background: #ffffff;
-            padding: 30px;
+        .login-wrapper {
+            background-color: #10b981; /* ছবির মতো মেইন গ্রিন ব্যাকগ্রাউন্ড */
+            padding: 35px 50px;
             border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
             max-width: 400px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* পান্ডার ডিজাইন */
+        .panda {
+            position: relative;
+            width: 120px;
+            height: 100px;
+            margin-bottom: -10px;
+            z-index: 2;
+        }
+
+        .face {
+            background: #ffffff;
+            width: 100%;
+            height: 90px;
+            border-radius: 50% 50% 45% 45%;
+            position: absolute;
+            bottom: 0;
+            border: 3px solid #1e293b;
+        }
+
+        .ear {
+            background: #1e293b;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            position: absolute;
+            top: -5px;
+        }
+        .ear.left { left: -5px; transform: rotate(-38deg); }
+        .ear.right { right: -5px; transform: rotate(38deg); }
+
+        .eye {
+            background: #1e293b;
+            width: 28px;
+            height: 35px;
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .eye.left { left: 20px; transform: rotate(15deg); }
+        .eye.right { right: 20px; transform: rotate(-15deg); }
+
+        .eyeball {
+            background: #fff;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .blush {
+            background-color: #ff8bb1;
+            width: 14px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50px;
+        }
+        .blush.left { left: 12px; transform: rotate(25deg); }
+        .blush.right { right: 12px; transform: rotate(-25deg); }
+
+        .nose {
+            background: #1e293b;
+            width: 12px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            top: 52px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* পান্ডার থাবা/হাত */
+        .paw {
+            background: #1e293b;
+            width: 30px;
+            height: 30px;
+            border-radius: 50% 50% 30% 30%;
+            position: absolute;
+            bottom: -15px;
+            z-index: 3;
+            transition: 0.5s ease-in-out;
+            border: 2px solid #fff;
+        }
+        .paw.left { left: 20px; }
+        .paw.right { right: 20px; }
+
+        /* চোখ বন্ধ করার অ্যানিমেশন ক্লাস ট্রিক */
+        .panda.cover-eyes .paw.left {
+            transform: translateY(-55px) translateX(10px) scale(1.1);
+        }
+        .panda.cover-eyes .paw.right {
+            transform: translateY(-55px) translateX(-10px) scale(1.1);
+        }
+
+        /* মেইন সাদা লগইন বক্স */
+        .login-box {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
             text-align: center;
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 1;
+            box-sizing: border-box;
         }
 
         .login-box h2 {
             color: #0f172a;
-            font-size: 22px;
-            margin-bottom: 10px;
+            font-size: 20px;
+            margin-bottom: 8px;
+            margin-top: 0;
         }
 
         .admin-contact {
             color: #ef4444;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             background: #fef2f2;
             padding: 8px;
             border-radius: 6px;
             border: 1px solid #fee2e2;
         }
 
+        .pin-label {
+            display: block;
+            text-align: left;
+            font-size: 14px;
+            font-weight: bold;
+            color: #334155;
+            margin-bottom: 5px;
+        }
+
         .pin-input {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             font-size: 18px;
             letter-spacing: 8px;
             text-align: center;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            border: none;
+            border-bottom: 2px solid #cbd5e1;
+            margin-bottom: 20px;
             box-sizing: border-box;
-            background: #f8fafc;
+            background: #fff;
+            transition: 0.3s;
         }
 
         .pin-input:focus {
             outline: none;
-            border-color: #6366f1;
-            background: #fff;
+            border-bottom-color: #10b981;
         }
 
         .btn-login {
             width: 100%;
             padding: 12px;
-            background-color: #6366f1;
+            background-color: #10b981;
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 25px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: 0.3s;
         }
 
         .btn-login:hover {
-            background-color: #4f46e5;
+            background-color: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
         }
 
-        /* মূল কন্টেইনার */
+        /* --- মূল কন্টেইনার এবং কন্টেন্ট স্টাইল --- */
         .container {
             width: 100%;
             max-width: 500px;
@@ -108,10 +229,9 @@
             margin-top: 25px;
             box-sizing: border-box;
             border: 1px solid #e2e8f0;
-            display: none; /* লগইন না হওয়া পর্যন্ত লুকানো থাকবে */
+            display: none;
         }
 
-        /* 1000082770.jpg ছবির মতো হেডার ডিজাইন */
         h1 {
             text-align: center;
             color: #ffffff;
@@ -119,10 +239,10 @@
             font-weight: 700;
             margin-bottom: 25px;
             letter-spacing: -0.5px;
-            background-color: #0f1c2e; /* ছবির মতো গাঢ় নীল/কালো ব্যাকগ্রাউন্ড */
+            background-color: #0f1c2e;
             padding: 18px;
             border-radius: 12px;
-            border-left: 6px solid #e11d48; /* বাম পাশের লাল বর্ডার বা স্ট্রিপ */
+            border-left: 6px solid #e11d48;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
@@ -328,19 +448,45 @@
             border-top: 1px solid #e2e8f0;
             box-sizing: border-box;
             letter-spacing: 0.5px;
-            display: none; /* লগইন না হওয়া পর্যন্ত লুকানো থাকবে */
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- লক স্ক্রিন / লগইন ইন্টারফেস -->
+    <!-- লক স্ক্রিন / লগইন ইন্টারফেস (পান্ডা থিম আপডেট) -->
     <div id="loginScreen">
-        <div class="login-box">
-            <h2>ভেরিফিকেশন স্ক্রিন</h2>
-            <div class="admin-contact">পাসওয়ার্ডের জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।</div>
-            <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" onkeypress="handleKeyPress(event)">
-            <button type="button" onclick="checkPin()" class="btn-login">লগইন করুন</button>
+        <div class="login-wrapper">
+            <!-- পান্ডা ক্যারেক্টার কন্টেন্ট -->
+            <div class="panda" id="pandaFace">
+                <div class="ears">
+                    <div class="ear left"></div>
+                    <div class="ear right"></div>
+                </div>
+                <div class="face">
+                    <div class="eyes">
+                        <div class="eye left"><div class="eyeball"></div></div>
+                        <div class="eye right"><div class="eyeball"></div></div>
+                    </div>
+                    <div class="blush left"></div>
+                    <div class="blush right"></div>
+                    <div class="nose"></div>
+                    <div class="mouth"></div>
+                </div>
+                <div class="paws">
+                    <div class="paw left"></div>
+                    <div class="paw right"></div>
+                </div>
+            </div>
+
+            <!-- মূল ভেরিফিকেশন বক্স -->
+            <div class="login-box">
+                <h2>ভেরিফিকেশন স্ক্রিন</h2>
+                <div class="admin-contact">পাসওয়ার্ডের জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।</div>
+                <label for="pinInput" class="pin-label">Password:</label>
+                <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" onkeypress="handleKeyPress(event)">
+                <button type="button" onclick="checkPin()" class="btn-login">লগইন করুন</button>
+            </div>
         </div>
     </div>
 
@@ -400,6 +546,18 @@
     <script src="female_voters.js"></script>
 
     <script>
+        // পান্ডা অ্যানিমেশন লিসেনার যুক্ত করা হলো (মূল পিন কোড অপরিবর্তিত)
+        const pinInput = document.getElementById('pinInput');
+        const pandaFace = document.getElementById('pandaFace');
+
+        pinInput.addEventListener('focus', () => {
+            pandaFace.classList.add('cover-eyes');
+        });
+
+        pinInput.addEventListener('blur', () => {
+            pandaFace.classList.remove('cover-eyes');
+        });
+
         // পিন চেক করার ফাংশন
         function checkPin() {
             const pin = document.getElementById('pinInput').value;
@@ -410,6 +568,7 @@
             } else {
                 alert('ভুল পিন! সঠিক পিন টাইপ করুন অথবা অ্যাডমিনের সাথে যোগাযোগ করুন।');
                 document.getElementById('pinInput').value = '';
+                pandaFace.classList.remove('cover-eyes'); // এলার্ট আসলে চোখ থেকে হাত নামানোর জন্য
             }
         }
 
